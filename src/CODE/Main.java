@@ -3,7 +3,7 @@ package miniSGBD;
 import java.io.IOException;
 
 public class Main {
-		static void affichage(Frame[] f) {
+	static void affichage(Frame[] f) {
 		BufferManager BM = BufferManager.getInstance();
 		System.out.println("========== bufferPool case 1 ==========");
 		System.out.println("fileId " + BM.getBpool()[0].getPID().getFileIdx() + "    idPage ==>"
@@ -18,11 +18,11 @@ public class Main {
 		System.out.println("pinCount :  " + BM.getBpool()[1].getPin_count());
 		System.out.println("dirty : " + BM.getBpool()[1].getDirty());
 		System.out.println("tempFree : " + BM.getBpool()[1].getTemps_free());
-		
+
 		System.out.println();
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
 
 		DBParams.DBPath = args[0];
 		DBParams.pageSize = 4096;
@@ -34,8 +34,9 @@ public class Main {
 		byte[] tb = new byte[DBParams.pageSize];
 		byte[] tb2 = new byte[DBParams.pageSize];
 		byte[] tb3 = new byte[DBParams.pageSize];
+		byte[] tb10 = new byte[DBParams.pageSize];
 
-		PageId page =null;
+		PageId page = null;
 		PageId page2 = null;
 		PageId page3 = null;
 		PageId page4 = null;
@@ -54,18 +55,21 @@ public class Main {
 		tb3[1] = 8;
 		tb3[2] = 12;
 
-		page=disk.AllocPage();
-		page2=disk.AllocPage();
-		page3=disk.AllocPage();
-		page4=disk.AllocPage();
-		page5=disk.AllocPage();
-		page6=disk.AllocPage();
+		tb10[0] = 9;
+		tb10[1] = 10;
+		tb10[2] = 13;
+
+		page = disk.AllocPage();
+		page2 = disk.AllocPage();
+		page3 = disk.AllocPage();
+		page4 = disk.AllocPage();
+		// page5=disk.AllocPage();
+		// page6=disk.AllocPage();
 		disk.WritePage(page, tb);
 		disk.WritePage(page2, tb2);
 		disk.WritePage(page3, tb3);
+		disk.WritePage(page4, tb10);
 
-		System.out.println("ttssssst   "+page2.getPageIdx()+"   "+page2.getFileIdx());
-		System.out.println("ttssssst   "+page3.getPageIdx()+"   "+page3.getFileIdx());
 		byte[] tb4 = new byte[DBParams.pageSize];
 		byte[] tb5 = new byte[DBParams.pageSize];
 		byte[] tb6 = new byte[DBParams.pageSize];
@@ -73,18 +77,17 @@ public class Main {
 		disk.ReadPage(page, tb4);
 		disk.ReadPage(page2, tb5);
 		disk.ReadPage(page3, tb6);
+		disk.ReadPage(page4, tb10);
 		System.out.println(tb4[0]);
 		System.out.println(tb5[2]);
 		System.out.println(tb6[1]);
-
-		 //disk.clean_all();
+		System.out.println(tb10[1]);
 
 		BufferManager BM = BufferManager.getInstance();
 
 		byte[] tb7 = new byte[DBParams.pageSize];
 		byte[] tb8 = new byte[DBParams.pageSize];
 		byte[] tb9 = new byte[DBParams.pageSize];
-
 
 		tb7 = BM.getPage(page);
 		System.out.println("page 2 :");
@@ -98,13 +101,28 @@ public class Main {
 		affichage(BM.getBpool());
 
 		System.out.println(tb9[0]);
-
-		// tb = BM.GetPage(page);
-		// tb2 = BM.GetPage(page2);
-		// tb3 = BM.GetPage(page3);
-		// System.out.println(tb2[0]);
-		// BM.FreePage(page2, 0);
-		// tb3 = BM.GetPage(page3);
+		// disk.clean_all();
+		
+		Catalog catalog = Catalog.getInstance();
+		catalog.Init();
+		ColInfo colInfo = new ColInfo("math", "int");
+		ColInfo colInfo2 = new ColInfo("prog", "int");
+		ColInfo colInfo3 = new ColInfo("mention", "String");
+		ColInfo[] col = new ColInfo[3];
+		col[0] = colInfo;
+		col[1] = colInfo;
+		col[2] = colInfo;
+		RelationInfo relInfo = new RelationInfo("etudiant", 3, col);
+		Record record = new Record(relInfo);
+		catalog.AddRelation(relInfo);
+		catalog.Finish();
+		
+		catalog.Init();
+		
+		System.out.println(catalog.getCmp());
+		 
+		
+		
 
 	}
 }
