@@ -1,3 +1,5 @@
+package CODE;
+
 
 public class DBParams {
 	public static String DBPath;

@@ -1,3 +1,5 @@
+package CODE;
+
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -18,15 +20,15 @@ public class Record {
 			String values_type = relInfo.getCol()[i].getCol_type();
 			String[] pw = values_type.split("string");
 
-			if(values_type == "int") {
+			if(values_type.equals("int")) {
 				buff.putInt(Integer.parseInt(values[i]));
 			}
 			
-			if(values_type == "float") {
+			if(values_type.equals("float")) {
 				buff.putFloat(Float.parseFloat(values[i]));
 			}
 			
-			if(pw[0] == "string") {
+			if(pw[0].equals("string")) {
 				for(int j=0;j<= Integer.parseInt(pw[1]);j++ ) {
 					String[] sp = values[i].split("");
 					for(int z=0;z<=sp.length;z++) {

@@ -1,3 +1,6 @@
+package CODE;
+
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class FileManager {
@@ -17,16 +20,33 @@ public class FileManager {
 	
 	public PageId readPageIdFromPageBuffer(ByteBuffer buff,boolean first) {
 		
-		return null;
+		if(first) {
+			buff.position(0);
+			return new PageId(buff.getInt(), buff.getInt());
+			}else {
+			buff.position(8);
+			return new PageId(buff.getInt(), buff.getInt());
+		}
+	}
+	
+	public void writePageIdToPageBuffer(PageId PID,ByteBuffer buff,boolean first) {
+		if(first) {
+			buff.position(0);
+			buff.putInt(Integer.valueOf(PID.getFileIdx()));
+			buff.putInt(Integer.valueOf(PID.getPageIdx()));
+			
+		}else {
+			buff.position(8);
+			buff.putInt(Integer.valueOf(PID.getFileIdx()));
+			buff.putInt(Integer.valueOf(PID.getPageIdx()));
+		}
 		
 	}
 	
-	public PageId writePageIdToPageBuffer(PageId PID,ByteBuffer buff,boolean first) {
-		return null;
+	public PageId createHeaderPage() throws IOException {
+		DiskManager disk = DiskManager.getInstance();
+		PageId header = disk.AllocPage();
 		
-	}
-	
-	public PageId createHeaderPage() {
 		return null;
 	}
 	

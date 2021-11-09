@@ -1,6 +1,7 @@
+package CODE;
+
 
 import java.io.*;
-import java.nio.file.Files;
 public class Main {
 
 	public static void main(String[] args) throws IOException  {
@@ -17,7 +18,7 @@ public class Main {
 		DiskManager disk = DiskManager.getInstance();
 	
 		
-		//PageId tst = disk.AllocPage();
+		PageId tst = disk.AllocPage();
 		PageId page = new PageId(0,0);
 		PageId page2 = new PageId(0,1);
 		PageId page3 = new PageId(0,2);
@@ -35,11 +36,11 @@ public class Main {
 		System.out.print(tb3[0]);*/
 	
 		
-		//DiskManager disk = DiskManager.getInstance();
-		Catalog cat = Catalog.getInstance();
-		cat.Finish();
-		
-		
+		DiskManager disk = DiskManager.getInstance();
+		PageId tst = disk.AllocPage();
+		PageId tst2 = disk.AllocPage();
+		System.out.println(tst.getPageIdx());
+		disk.clean_all();
 		
 	}
 
