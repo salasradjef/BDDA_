@@ -49,18 +49,18 @@ public class Record {
 			String values_type = relInfo.getCol()[i].getCol_type();
 			String[] pw = values_type.split("string");
 
-			if(values_type == "int") {
+			if(values_type.equals("int")) {
 				values[i] = String.valueOf(buff.getInt());
 				
 			}
 			
-			if(values_type == "float") {
+			if(values_type.equals("float")) {
 				values[i] = String.valueOf(buff.getFloat());
 				
 				
 			}
 			
-			if(pw[0] == "string") {
+			if(pw[0].equals("string")) {
 				StringBuffer sb = new StringBuffer();
 				for(int j=0;j<= Integer.parseInt(pw[1]);j++ ) {
 					buff.getChar();
