@@ -1,3 +1,4 @@
+package miniSGBD;
 
 public class RelationInfo {
 	private String name;

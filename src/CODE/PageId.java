@@ -1,3 +1,4 @@
+package miniSGBD;
 
 public class PageId {
 	private int FileIdx;

@@ -1,8 +1,9 @@
+package miniSGBD;
+
 import java.nio.ByteBuffer;
 
 public class FileManager {
-
-	private static FileManager INSTANCE;
+private static FileManager INSTANCE;
 	
 	public static FileManager getInstance() {
 		if(INSTANCE == null) {

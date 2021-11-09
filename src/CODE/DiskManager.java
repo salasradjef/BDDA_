@@ -1,3 +1,5 @@
+package miniSGBD;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
@@ -36,7 +38,7 @@ public class DiskManager  {
 			@Override
 			public boolean accept(File dir, String name) {
 				File file = new File(dir,name);
-				return name.endsWith(".df") && file.length()<16348 ;
+				return name.endsWith(".df") && file.length()<16384 ;
 			}
 			
 		};
@@ -102,16 +104,16 @@ public class DiskManager  {
 			RandomAccessFile rf = new RandomAccessFile(df, "rw");
 			rf.setLength(df.length()+4096);
 			rf.close();
-			if(df.length() == 4096) {
+			if(df.length() == 4096*2) {
 				PageId pid = new PageId(FileId, 1);
 				return pid;
 			}
-			if(df.length() == 8192) {
+			if(df.length() == 12288) {
 				PageId pid = new PageId(FileId, 2);
 				return pid;
 			}
 			
-			if(df.length() == 12288 || df.length() == 16384) {
+			if(df.length() == 16384) {
 				PageId pid = new PageId(FileId, 3);
 				return pid;
 			}

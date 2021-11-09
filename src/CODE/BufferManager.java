@@ -1,3 +1,5 @@
+package miniSGBD;
+
 import java.io.IOException;
 
 public class BufferManager {
@@ -5,6 +7,7 @@ public class BufferManager {
 	private static BufferManager INSTANCE;
 	private Frame[] bpool;
 	private int time;
+	
 	public static BufferManager getInstance() {
 		if(INSTANCE == null) {
 			INSTANCE = new BufferManager();
@@ -13,9 +16,9 @@ public class BufferManager {
 		
 		return INSTANCE;
 	}
-	
-	
-	
+
+
+
 	private BufferManager() {
 		bpool = new Frame[DBParams.frameCount];
 		time =0;
@@ -105,6 +108,18 @@ public class BufferManager {
 				bpool[i].setTemps_free(0);
 			}
 		}
+	}
+	
+	
+	
+	public Frame[] getBpool() {
+		return bpool;
+	}
+
+
+
+	public void setBpool(Frame[] bpool) {
+		this.bpool = bpool;
 	}
 	
 }

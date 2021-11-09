@@ -1,3 +1,5 @@
+package miniSGBD;
+
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -94,4 +96,3 @@ public class Record {
 		this.values = values;
 	}
 }
-
