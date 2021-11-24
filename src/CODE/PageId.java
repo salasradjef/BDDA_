@@ -1,3 +1,5 @@
+package CODE;
+
 
 public class PageId {
 	private int FileIdx;
@@ -13,6 +15,12 @@ public class PageId {
 	}
 	public int getPageIdx() {
 		return PageIdx;
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "(" + getFileIdx() +"," + getPageIdx() +")";
 	}
 	
 }

@@ -1,13 +1,24 @@
+package CODE;
+
+import java.io.File;
+import java.nio.ByteBuffer;
 
 public class Perso {
 
 	public static void main(String[] args) {
-		String a = new String ("string3");
+		ByteBuffer buff = ByteBuffer.allocate(12);
+		buff.position(0);
+		buff.putInt(12);
+		buff.putInt(17);
+		buff.putInt(19);
 		
-		String[] pw = a.split("string");
+		buff.position(0);
 		
-		System.out.println(pw[1]);
-
+		for(int i = 0; i<buff.capacity() / 4 ; i++) {
+			System.out.println(buff.getInt());
+		}
 	}
+	
+
 
 }

@@ -1,7 +1,11 @@
+package CODE;
+
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -33,9 +37,19 @@ public class Catalog implements Serializable {
 	
 	public void Init() throws FileNotFoundException, IOException, ClassNotFoundException {
 		String path = DBParams.DBPath + "\\Catalog.def";
-		ObjectInputStream object = new ObjectInputStream(new FileInputStream(path));
-		INSTANCE = (Catalog) object.readObject();
-		object.close();
+		FileInputStream catalog_file = null;
+		
+		try {
+			catalog_file = new FileInputStream(path);
+		} catch (Exception e) {
+			Finish();
+		}finally {
+			catalog_file = new FileInputStream(path);
+			ObjectInputStream object = new ObjectInputStream(catalog_file);
+			INSTANCE = (Catalog) object.readObject();
+			object.close();	
+		}
+		
 	}
 	public void Finish() throws FileNotFoundException, IOException {
 		String path = DBParams.DBPath + "\\Catalog.def";

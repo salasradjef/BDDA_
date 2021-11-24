@@ -1,3 +1,5 @@
+package CODE;
+
 
 public class ColInfo {
 	private String col_name;

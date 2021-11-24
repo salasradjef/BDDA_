@@ -1,9 +1,11 @@
+package CODE;
+
 
 import java.io.*;
-import java.nio.file.Files;
+import java.nio.ByteBuffer;
 public class Main {
 
-	public static void main(String[] args) throws IOException  {
+	public static void main(String[] args) throws IOException, ClassNotFoundException  {
 		
 		DBParams.DBPath = args[0];
 		DBParams.pageSize =4096;
@@ -35,10 +37,26 @@ public class Main {
 		System.out.print(tb3[0]);*/
 	
 		
-		//DiskManager disk = DiskManager.getInstance();
-		Catalog cat = Catalog.getInstance();
-		cat.Finish();
 		
+		FileManager a = FileManager.getInstance();
+		/*DiskManager disk = DiskManager.getInstance();
+		BufferManager BM = BufferManager.getInstance();
+		
+		PageId page = disk.AllocPage();
+		PageId page2 = disk.AllocPage();
+		
+		byte[] bufferPage1 = BM.getPage(page);
+		ByteBuffer buffer1 = ByteBuffer.wrap(bufferPage1);		
+		
+		byte[] buffPage2 = BM.getPage(page2);
+		ByteBuffer buffer2 = ByteBuffer.wrap(buffPage2);
+		
+		
+		
+		a.writePageIdToPageBuffer(page,buffer2,true);
+		
+		*/
+		PageId headerPage = a.createHeaderPage();
 		
 		
 	}

@@ -1,3 +1,4 @@
+package CODE;
 import java.io.IOException;
 
 public class BufferManager {
