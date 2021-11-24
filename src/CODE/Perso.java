@@ -1,15 +1,24 @@
 package CODE;
 
 import java.io.File;
+import java.nio.ByteBuffer;
 
 public class Perso {
 
 	public static void main(String[] args) {
-		File df = new File("C:\\Users\\INFOTECH\\eclipse-workspace\\IDE_PROJET_RADJEF_NAITAIMER\\src\\\\DB\\F0.df");
-		System.out.println(df.length() == 4096);
+		ByteBuffer buff = ByteBuffer.allocate(12);
+		buff.position(0);
+		buff.putInt(12);
+		buff.putInt(17);
+		buff.putInt(19);
 		
+		buff.position(0);
 		
-
+		for(int i = 0; i<buff.capacity() / 4 ; i++) {
+			System.out.println(buff.getInt());
+		}
 	}
+	
+
 
 }

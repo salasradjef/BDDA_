@@ -4,6 +4,7 @@ package CODE;
 public class Rid {
 	private PageId Rid;
 	private int slotIdx;
+	
 	public PageId getRid() {
 		return Rid;
 	}

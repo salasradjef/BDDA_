@@ -17,4 +17,10 @@ public class PageId {
 		return PageIdx;
 	}
 	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "(" + getFileIdx() +"," + getPageIdx() +")";
+	}
+	
 }
