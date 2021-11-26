@@ -244,8 +244,31 @@ public class FileManager {
 	}
 	
 	
-	public ArrayList<Record> getRecordsInDataPage(RelationInfo relinfo,PageId PID){
+	public ArrayList<Record> getRecordsInDataPage(RelationInfo relinfo,PageId PID) throws IOException{
+		ArrayList<Record> listRecords = new ArrayList<>();
+		ArrayList <Integer>  ID_RECORDs = new ArrayList<>();
 		
+		BufferManager BM = BufferManager.getInstance();
+		
+		ByteBuffer buff = byteToBuffer(BM.getPage(PID));
+		buff.position(16);
+		int s;
+		for(int i=0;i<relinfo.getSlotCount();i++) {
+			s = buff.getInt();
+			if(s==1) {
+				ID_RECORDs.add(i);
+			}
+		}
+		buff.position(16+(4*relinfo.getSlotCount()));
+		
+		for(int i = 0;i<relinfo.getSlotCount();i++) {
+			if(ID_RECORDs.contains(i)) {
+				Record rec = new Record(relinfo);
+				rec.readFromBuffer(buff, 16+(4*relinfo.getSlotCount())+(i*relinfo.getRecordSize()));
+			}
+		}
+		
+	
 		return null;
 	}
 	
