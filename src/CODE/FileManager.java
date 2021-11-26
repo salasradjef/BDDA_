@@ -69,6 +69,9 @@ public class FileManager {
 		return header;
 	}
 	
+	
+	
+	
 	public PageId addDataPage(RelationInfo relInfo) throws IOException {
 		DiskManager disk = DiskManager.getInstance();
 		BufferManager BM = BufferManager.getInstance();
@@ -189,7 +192,7 @@ public class FileManager {
 		
 		
 		
-		if(isItFull(PID)) {
+		if(isNotFull(PID,relInfo)) {
 			byte[] h_array = BM.getPage(relInfo.getHeaderPageId());
 			ByteBuffer h_Buffer = ByteBuffer.wrap(h_array);
 			
@@ -216,16 +219,15 @@ public class FileManager {
 	}
 	
 	
-	private boolean isItFull(PageId PID) throws IOException {
+	public boolean isNotFull(PageId PID,RelationInfo rel) throws IOException {
 		
 		boolean trv = false;
 		BufferManager BM = BufferManager.getInstance();
-		byte[] a = BM.getPage(PID);
-		ByteBuffer buff = ByteBuffer.wrap(a);
+		ByteBuffer buff = byteToBuffer(BM.getPage(PID));
 		BM.FreePage(PID, 0);
 		buff.position(16);
-		int s;
-		for(int i = 0 ;i<buff.capacity() / 4;i++) {
+		int s=-1;
+		for(int i = 0 ;i<rel.getSlotCount();i++) {
 			s = buff.getInt();
 			if(s == 0) {
 				trv = true;
@@ -237,7 +239,7 @@ public class FileManager {
 	}
 	
 	
-	private ByteBuffer byteToBuffer(byte[] a) {
+	public ByteBuffer byteToBuffer(byte[] a) {
 		return ByteBuffer.wrap(a);
 	}
 	
