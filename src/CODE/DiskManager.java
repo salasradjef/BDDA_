@@ -32,7 +32,7 @@ public class DiskManager  {
 		String DBPath = DBParams.DBPath;
 		File f= new File(DBPath);
 		
-		//filtre qui permet de recuperer tout les fichiers qui se termine avec df et leurs taille est inférieur a 16348o
+		//filtre qui permet de recuperer tout les fichiers qui se termine avec df et leurs taille est infï¿½rieur a 16348o
 		FilenameFilter filter1 = new FilenameFilter() {
 			
 			@Override
@@ -122,7 +122,7 @@ public class DiskManager  {
 		
 
 	}
-	//methode qui permet de lire une page et de récuper ses infos dans un buff
+	//methode qui permet de lire une page et de recuper ses infos dans un buff
 	public  void ReadPage(PageId pageId,byte[] buff) throws IOException {
 		int pageID = pageId.getPageIdx();
 		int fileId = pageId.getFileIdx();

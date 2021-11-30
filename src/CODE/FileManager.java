@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
-import com.sun.jdi.Field;
-
 
 public class FileManager {
 
@@ -86,10 +84,6 @@ public class FileManager {
 		
 		byte[] b = BM.getPage(pageV); // Charger notre nouvelle page
 		ByteBuffer tmp2 = ByteBuffer.wrap(b);
-		
-		
-		
-		
 		writePageIdToPageBuffer(pageV, tmp, true); //ecrire dans le premierPageId de la headerPage le PID de notre nouvelle
 		
 		writePageIdToPageBuffer(headerPage, tmp2, true);
@@ -103,8 +97,6 @@ public class FileManager {
 		for(int i=0;i<relInfo.getSlotCount();i++) {
 			tmp2.putInt(0);
 		}
-		
-		
 		BM.FreePage(pageV, 1);
 		return pageV;
 	}
@@ -147,10 +139,6 @@ public class FileManager {
 				firstEmpty = getInstance().addDataPage(relInfo);	
 				break;
 			}
-
-			
-			
-			
 			if(caseVIDE && trouve) {
 				break;
 			}
@@ -189,38 +177,22 @@ public class FileManager {
 			}
 		}
 		
-		
-		
-		
-		if(isNotFull(PID,relInfo)) {
+
+		if(!isNotFull(PID,relInfo)) {
 			byte[] h_array = BM.getPage(relInfo.getHeaderPageId());
 			ByteBuffer h_Buffer = ByteBuffer.wrap(h_array);
-			
-			
-			
-			
 			PageId firstFULL = readPageIdFromPageBuffer(h_Buffer, false);
-			
-			
-			
 			this.writePageIdToPageBuffer(PID, h_Buffer, false);
 			BM.FreePage(relInfo.getHeaderPageId(), 1);
-			
-			ByteBuffer firstFull_Buffer = byteToBuffer(BM.getPage(firstFULL)); // Chargement de la premiere page rempli
-			
-			
-			
-			
-		}	
+			ByteBuffer firstFull_Buffer = byteToBuffer(BM.getPage(firstFULL)); // Chargement de la premiere page remplie
+		}
+		//TODO
 		BM.FreePage(PID, 1);
-		return fin;	
-	
-		
+		return fin;
 	}
 	
 	
 	public boolean isNotFull(PageId PID,RelationInfo rel) throws IOException {
-		
 		boolean trv = false;
 		BufferManager BM = BufferManager.getInstance();
 		ByteBuffer buff = byteToBuffer(BM.getPage(PID));
@@ -234,7 +206,6 @@ public class FileManager {
 				break;
 			}
 		}
-		
 		return trv;
 	}
 	
@@ -247,10 +218,9 @@ public class FileManager {
 	public ArrayList<Record> getRecordsInDataPage(RelationInfo relinfo,PageId PID) throws IOException{
 		ArrayList<Record> listRecords = new ArrayList<>();
 		ArrayList <Integer>  ID_RECORDs = new ArrayList<>();
-		
 		BufferManager BM = BufferManager.getInstance();
-		
 		ByteBuffer buff = byteToBuffer(BM.getPage(PID));
+		BM.FreePage(PID,0);
 		buff.position(16);
 		int s;
 		for(int i=0;i<relinfo.getSlotCount();i++) {
@@ -260,24 +230,51 @@ public class FileManager {
 			}
 		}
 		buff.position(16+(4*relinfo.getSlotCount()));
-		
 		for(int i = 0;i<relinfo.getSlotCount();i++) {
-			if(ID_RECORDs.contains(i)) {
+			if (ID_RECORDs.contains(i)) {
 				Record rec = new Record(relinfo);
-				rec.readFromBuffer(buff, 16+(4*relinfo.getSlotCount())+(i*relinfo.getRecordSize()));
+				rec.readFromBuffer(buff, 16 + (4 * relinfo.getSlotCount()) + (i * relinfo.getRecordSize()));
+				listRecords.add(rec);
 			}
 		}
-		
-	
-		return null;
+		return listRecords;
 	}
 	
-	public Rid InsertRecordIntoRelation(RelationInfo relinfo, Record record) {
-		return null;
+	public Rid InsertRecordIntoRelation(RelationInfo relinfo, Record record) throws IOException {
+		PageId headerPage = relinfo.getHeaderPageId();
+		PageId freePage = INSTANCE.getFreeDataPageId(relinfo);
+		Rid recordId = INSTANCE.InsertRecordIntoRelation(relinfo,record);
+		return recordId;
 	}
-	
-	public ArrayList<Record> getAllRecords(RelationInfo relinfo){
-		return null;
+
+
+	public ArrayList<Record> getAllRecords(RelationInfo relinfo) throws IOException {
+		ArrayList<Record> listRecord = new ArrayList<>();
+		BufferManager BM = BufferManager.getInstance();
+
+		PageId headerPage = relinfo.getHeaderPageId();
+		ByteBuffer headerPage_Buffer = INSTANCE.byteToBuffer(BM.getPage(headerPage));
+		PageId firstEmpty = INSTANCE.readPageIdFromPageBuffer(headerPage_Buffer,true); //Premiere page pleine
+		PageId pid2 = INSTANCE.readPageIdFromPageBuffer(headerPage_Buffer,false); //Premiere page pas pleine
+		BM.FreePage(headerPage,0);
+
+		ArrayList<Record> tmpPid1 = new ArrayList<>();
+		ArrayList<Record> tmpPid2 = new ArrayList<>();
+		ArrayList<Record> ListOfRecords = new ArrayList<>();
+
+
+		ByteBuffer buffer = INSTANCE.byteToBuffer(BM.getPage(firstEmpty)); // Chargement de la premiere dataPage
+		int i=0;
+
+
+
+		//ListOfRecords.addAll(tmpPid1);
+		//ListOfRecords.addAll(tmpPid2);
+
+
+
+
+
 	}
 	
 	
