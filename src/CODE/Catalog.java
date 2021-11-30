@@ -29,7 +29,7 @@ public class Catalog implements Serializable {
 		rel_info = new ArrayList<RelationInfo>();
 	}
 	
-	private void AddRelation(RelationInfo rel) {
+	public void AddRelation(RelationInfo rel) {
 		rel_info.add(rel);
 		cmp++;
 	}

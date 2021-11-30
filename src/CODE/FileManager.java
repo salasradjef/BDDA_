@@ -56,12 +56,8 @@ public class FileManager {
 		
 		byte[] a = BM.getPage(header);
 		ByteBuffer tmp = ByteBuffer.wrap(a);
-		
-		
 		writePageIdToPageBuffer(fac, tmp, true);
 		writePageIdToPageBuffer(fac,tmp,false);
-		
-		
 		BM.FreePage(header, 1);
 		
 		return header;

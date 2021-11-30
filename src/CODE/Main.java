@@ -3,6 +3,8 @@ package CODE;
 
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.util.Scanner;
+
 public class Main {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException  {
@@ -81,8 +83,16 @@ public class Main {
 		BM.FreePage(Page, 1);
 		
 		System.out.println(a.isNotFull(Page, relInfo));*/
-
-	
+		DBManager dbM = DBManager.getInstance();
+		Scanner sc = new Scanner(System.in);
+		while(true){
+			String cmd = sc.nextLine();
+			if(cmd.equals("QUIT")){
+				dbM.Finish();
+				System.out.println("bye");
+			}
+			dbM.ProcessCommand(cmd);
+		}
 		
 		
 		

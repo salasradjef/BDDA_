@@ -12,7 +12,6 @@ private static DBManager INSTANCE;
 			INSTANCE = new DBManager();
 			
 		}
-		
 		return INSTANCE;
 	}
 	
