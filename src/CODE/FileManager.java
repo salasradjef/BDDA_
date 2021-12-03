@@ -239,7 +239,7 @@ public class FileManager {
 	public Rid InsertRecordIntoRelation(RelationInfo relinfo, Record record) throws IOException {
 		PageId headerPage = relinfo.getHeaderPageId();
 		PageId freePage = INSTANCE.getFreeDataPageId(relinfo);
-		Rid recordId = INSTANCE.InsertRecordIntoRelation(relinfo,record);
+		Rid recordId = INSTANCE.writeRecordToDataPage(relinfo,record,freePage);
 		return recordId;
 	}
 
