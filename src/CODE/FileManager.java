@@ -69,6 +69,9 @@ public class FileManager {
 		return header;
 	}
 	
+	
+	
+	
 	public PageId addDataPage(RelationInfo relInfo) throws IOException {
 		DiskManager disk = DiskManager.getInstance();
 		BufferManager BM = BufferManager.getInstance();
@@ -162,38 +165,71 @@ public class FileManager {
 		byte[] a = BM.getPage(PID);
 		ByteBuffer buff = ByteBuffer.wrap(a);
 		boolean trv = false;
-		int sltID;
+		int sltID = 0;
+		int s;
+		Rid fin = null;
 		while(!trv) {
 			buff.position(16);
 			for(int i=0;i<relInfo.getSlotCount();i++) {
-				if(buff.getInt() == 0 ) {
+				s = buff.getInt();
+				if(s == 0 ) {
 					trv = true;
 					sltID = i;
 				}
 			}
 		}
 		
+		 int z; int pos;
+		for(int i=0;i<=sltID;i++) {
+			z = buff.getInt();
+			if (i == sltID) {
+				pos = buff.position();
+				record.writeToBuffer(buff, pos);
+				 fin = new Rid(PID, sltID);
+			}
+		}
 		
 		
+		
+		
+		if(isNotFull(PID,relInfo)) {
+			byte[] h_array = BM.getPage(relInfo.getHeaderPageId());
+			ByteBuffer h_Buffer = ByteBuffer.wrap(h_array);
+			
+			
+			
+			
+			PageId firstFULL = readPageIdFromPageBuffer(h_Buffer, false);
+			
+			
+			
+			this.writePageIdToPageBuffer(PID, h_Buffer, false);
+			BM.FreePage(relInfo.getHeaderPageId(), 1);
+			
+			ByteBuffer firstFull_Buffer = byteToBuffer(BM.getPage(firstFULL)); // Chargement de la premiere page rempli
+			
+			
+			
+			
+		}	
+		BM.FreePage(PID, 1);
+		return fin;	
 	
-		
-		
-		return null;
 		
 	}
 	
 	
-	private boolean isItFull(PageId PID) throws IOException {
+	public boolean isNotFull(PageId PID,RelationInfo rel) throws IOException {
 		
 		boolean trv = false;
 		BufferManager BM = BufferManager.getInstance();
-		byte[] a = BM.getPage(PID);
-		ByteBuffer buff = ByteBuffer.wrap(a);
+		ByteBuffer buff = byteToBuffer(BM.getPage(PID));
 		BM.FreePage(PID, 0);
 		buff.position(16);
-		
-		for(int i = 0 ;i<buff.capacity() / 4;i++) {
-			if(buff.getInt() == 0) {
+		int s=-1;
+		for(int i = 0 ;i<rel.getSlotCount();i++) {
+			s = buff.getInt();
+			if(s == 0) {
 				trv = true;
 				break;
 			}
@@ -202,6 +238,10 @@ public class FileManager {
 		return trv;
 	}
 	
+	
+	public ByteBuffer byteToBuffer(byte[] a) {
+		return ByteBuffer.wrap(a);
+	}
 	
 	
 	public ArrayList<Record> getRecordsInDataPage(RelationInfo relinfo,PageId PID){

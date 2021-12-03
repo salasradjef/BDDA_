@@ -39,10 +39,10 @@ public class Main {
 		
 		
 		FileManager a = FileManager.getInstance();
-		/*DiskManager disk = DiskManager.getInstance();
+		DiskManager disk = DiskManager.getInstance();
 		BufferManager BM = BufferManager.getInstance();
 		
-		PageId page = disk.AllocPage();
+		/*PageId page = disk.AllocPage();
 		PageId page2 = disk.AllocPage();
 		
 		byte[] bufferPage1 = BM.getPage(page);
@@ -56,7 +56,32 @@ public class Main {
 		a.writePageIdToPageBuffer(page,buffer2,true);
 		
 		*/
-		PageId headerPage = a.createHeaderPage();
+		
+		
+		/*Test IsNotFull*/
+		/*
+		ColInfo colInfo = new ColInfo("math", "int");
+		ColInfo colInfo2 = new ColInfo("prog", "int");
+		ColInfo colInfo3 = new ColInfo("mention", "String");
+		ColInfo[] col = new ColInfo[3];
+		col[0] = colInfo;
+		col[1] = colInfo;
+		col[2] = colInfo;
+		
+		PageId Page = disk.AllocPage();
+		RelationInfo relInfo = new RelationInfo("etudiant", 3, col,Page);
+		ByteBuffer page = a.byteToBuffer(BM.getPage(Page)); 
+		page.position(16);
+		for(int i = 0 ;i<relInfo.getSlotCount();i++) {
+			page.putInt(1);
+	
+		}
+
+		
+		BM.FreePage(Page, 1);
+		
+		System.out.println(a.isNotFull(Page, relInfo));*/
+		
 		
 		
 	}
