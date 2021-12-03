@@ -172,18 +172,25 @@ public class FileManager {
 				 fin = new Rid(PID, sltID);
 			}
 		}
-		
+		BM.FreePage(PID, 1);
 
 		if(!isNotFull(PID,relInfo)) {
-			byte[] h_array = BM.getPage(relInfo.getHeaderPageId());
-			ByteBuffer h_Buffer = ByteBuffer.wrap(h_array);
-			PageId firstFULL = readPageIdFromPageBuffer(h_Buffer, false);
-			this.writePageIdToPageBuffer(PID, h_Buffer, false);
-			BM.FreePage(relInfo.getHeaderPageId(), 1);
-			ByteBuffer firstFull_Buffer = byteToBuffer(BM.getPage(firstFULL)); // Chargement de la premiere page remplie
+			ByteBuffer headerPage_buff = byteToBuffer(BM.getPage(relInfo.getHeaderPageId()));
+			PageId firstFull = readPageIdFromPageBuffer(headerPage_buff,true);
+			writePageIdToPageBuffer(PID,headerPage_buff,false);
+			BM.FreePage(relInfo.getHeaderPageId(),1);
+
+			ByteBuffer firstFull_buff = byteToBuffer(BM.getPage(firstFull));
+			writePageIdToPageBuffer(PID,firstFull_buff,true);
+			BM.FreePage(firstFull,1);
+
+			ByteBuffer PID_buff = byteToBuffer(BM.getPage(PID));
+			writePageIdToPageBuffer(firstFull,PID_buff,false);
+			writePageIdToPageBuffer(relInfo.getHeaderPageId(),PID_buff,true);
+
+			BM.FreePage(PID,1);
 		}
-		//TODO
-		BM.FreePage(PID, 1);
+
 		return fin;
 	}
 	
@@ -239,7 +246,7 @@ public class FileManager {
 	public Rid InsertRecordIntoRelation(RelationInfo relinfo, Record record) throws IOException {
 		PageId headerPage = relinfo.getHeaderPageId();
 		PageId freePage = INSTANCE.getFreeDataPageId(relinfo);
-		Rid recordId = INSTANCE.InsertRecordIntoRelation(relinfo,record);
+		Rid recordId = INSTANCE.writeRecordToDataPage(relinfo,record,freePage);
 		return recordId;
 	}
 
