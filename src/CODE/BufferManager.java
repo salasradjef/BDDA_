@@ -107,5 +107,15 @@ public class BufferManager {
 			}
 		}
 	}
-	
+
+	public Frame[] getBpool() {
+		return bpool;
+	}
+
+
+
+	public void setBpool(Frame[] bpool) {
+		this.bpool = bpool;
+	}
+
 }

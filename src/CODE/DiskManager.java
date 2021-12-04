@@ -92,8 +92,6 @@ public class DiskManager  {
 				
 				
 			}
-			
-			
 		}else {
 			
 			String[] fileId = paths[0].split("");

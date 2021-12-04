@@ -21,7 +21,7 @@ public class FileManager {
 
 
 	public PageId readPageIdFromPageBuffer(ByteBuffer buff,boolean first) {
-
+	/*Tested*/
 		if(first) {
 			buff.position(0);
 			return new PageId(buff.getInt(), buff.getInt());
@@ -32,6 +32,7 @@ public class FileManager {
 	}
 
 	public void writePageIdToPageBuffer(PageId PID,ByteBuffer buff,boolean first) {
+		/*Tested*/
 		if(first) {
 			buff.position(0);
 			buff.putInt(Integer.valueOf(PID.getFileIdx()));
@@ -47,6 +48,7 @@ public class FileManager {
 	}
 
 	public PageId createHeaderPage() throws IOException {
+		/*Tested*/
 		DiskManager disk = DiskManager.getInstance();
 		PageId header = disk.AllocPage();
 
@@ -67,6 +69,7 @@ public class FileManager {
 
 
 	public PageId addDataPage(RelationInfo relInfo) throws IOException {
+		/*Tested*/
 		DiskManager disk = DiskManager.getInstance();
 		BufferManager BM = BufferManager.getInstance();
 

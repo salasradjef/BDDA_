@@ -11,6 +11,8 @@ public class Record {
 	
 	public Record(RelationInfo rel) {
 		this.setRelInfo(rel);
+		values = new String[rel.getNbr_col()];
+
 	}
 	
 	
