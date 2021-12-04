@@ -58,5 +58,9 @@ public class Catalog implements Serializable {
 		output.writeObject(Catalog.getInstance());
 		output.close();
 	}
+	public void reset(){
+		cmp=0;
+		rel_info.clear();
+	}
 	
 }

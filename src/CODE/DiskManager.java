@@ -217,8 +217,8 @@ public class DiskManager  {
 	
 	public void clean_all() {
 		File f= new File(DBParams.DBPath);
-		for(File file: f.listFiles()) 
-		    if (!file.isDirectory()) 
-		        file.delete();
+		for(File file: f.listFiles()) {
+		    if (!file.isDirectory()) file.delete();
+		}
 	}
 }

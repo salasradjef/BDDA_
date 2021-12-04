@@ -10,7 +10,6 @@ private static DBManager INSTANCE;
 	public static DBManager getInstance() {
 		if(INSTANCE == null) {
 			INSTANCE = new DBManager();
-			
 		}
 		return INSTANCE;
 	}
@@ -43,9 +42,13 @@ private static DBManager INSTANCE;
 				inst.Execute();
 				break;
 			case "DROPDB":
-				System.out.println("Tu veux la commande DROPDB?");
+				DROPDBCommand drop = new DROPDBCommand();
+				drop.Execute();
+
 				break;
 			case "INSERT":
+				INSERTCommand insert = new INSERTCommand(ch);
+				insert.Execute();
 				System.out.println("Tu veux la commande INSERT?");
 				break;
 			case "BATCHINSERT":
@@ -59,6 +62,7 @@ private static DBManager INSTANCE;
 				break;
 			default:
 				System.err.println("La commande passé n'existe pas :)");
+				break;
 		}
 	}
 	

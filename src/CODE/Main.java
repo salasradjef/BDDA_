@@ -17,11 +17,13 @@ public class Main {
 
 		DBManager dbM = DBManager.getInstance();
 		Scanner sc = new Scanner(System.in);
+		dbM.Init();
 		while(true){
 			String cmd = sc.nextLine();
 			if(cmd.equals("QUIT")){
 				dbM.Finish();
 				System.out.println("bye");
+				break;
 			}
 			dbM.ProcessCommand(cmd);
 		}
