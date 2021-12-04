@@ -8,20 +8,17 @@ import java.util.ArrayList;
 public class Perso {
 
 	public static void main(String[] args) {
-		ArrayList<String> a1 = new ArrayList<>();
-		ArrayList<String> a2 = new ArrayList<>();
+		String toParse = "CREATE RELATION R (X:int,C2:float,BLA:string10)";
+		String[] parsed = toParse.split(" ");
+		/*for(int i = 0 ; i<parsed.length;i++){
+			System.out.print(i);
+			System.out.println(parsed[i]);
+		}*/
+		String  between = parsed[3].split("[\\(\\)]")[1];
+		String[] data = between.split(",");
+		String[] col = data[0].split(":");
+		String[] col2 = data[1].split(":");
 
-
-		a1.add("hey");
-		a1.add("hello");
-
-
-		a2.add("mybad");
-		a2.addAll(a1);
-
-		for(int i = 0;i<a2.size();i++){
-			System.out.print(a2.get(i));
-		}
 	}
 	
 

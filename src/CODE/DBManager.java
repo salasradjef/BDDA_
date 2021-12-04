@@ -12,7 +12,6 @@ private static DBManager INSTANCE;
 			INSTANCE = new DBManager();
 			
 		}
-		
 		return INSTANCE;
 	}
 	
@@ -23,15 +22,44 @@ private static DBManager INSTANCE;
 	}
 	
 	public void Finish() throws FileNotFoundException, IOException {
-		Catalog catalog = Catalog.getInstance();
-		BufferManager BM = BufferManager.getInstance();
-		catalog.Finish();
-		BM.FlushAll();
+		try{
+			Catalog catalog = Catalog.getInstance();
+			BufferManager BM = BufferManager.getInstance();
+
+			catalog.Finish();
+			BM.FlushAll();
+		}catch(IOException e ){
+			System.err.println("Fichier introuvable");
+		}
+
 		
 	}
 	
-	public void ProcessCommand(String ch) {
-		
+	public void ProcessCommand(String ch) throws IOException {
+		String parsing = ch.split(" ")[0];
+		switch (parsing){
+			case "CREATE":
+				CreateRelationCommand inst = new CreateRelationCommand(ch);
+				inst.Execute();
+				break;
+			case "DROPDB":
+				System.out.println("Tu veux la commande DROPDB?");
+				break;
+			case "INSERT":
+				System.out.println("Tu veux la commande INSERT?");
+				break;
+			case "BATCHINSERT":
+				System.out.println("Tu veux la commande BATCHINSERT?");
+				break;
+			case "SELECTMONO":
+				System.out.println("Tu veux la commande SELECTMONO?");
+				break;
+			case "DELETE":
+				System.out.println("Tu veux la commande DELETE");
+				break;
+			default:
+				System.err.println("La commande passé n'existe pas :)");
+		}
 	}
 	
 }
