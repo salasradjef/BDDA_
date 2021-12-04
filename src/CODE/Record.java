@@ -9,8 +9,9 @@ public class Record {
 	private String[] values;
 	
 	
-	public Record(RelationInfo rel) {
+	public Record(RelationInfo rel,String[] values) {
 		this.setRelInfo(rel);
+		this.values = values;
 	}
 	
 	

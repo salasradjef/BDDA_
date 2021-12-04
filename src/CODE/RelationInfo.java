@@ -1,7 +1,9 @@
 package CODE;
 
 
-public class RelationInfo {
+import java.io.Serializable;
+
+public class RelationInfo implements Serializable {
 	private String name;
 	private int nbr_col;
 	private ColInfo[] col;

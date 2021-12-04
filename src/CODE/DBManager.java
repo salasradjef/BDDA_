@@ -17,7 +17,6 @@ private static DBManager INSTANCE;
 	public void Init() throws FileNotFoundException, ClassNotFoundException, IOException {
 		Catalog catalog = Catalog.getInstance();
 		catalog.Init();
-		
 	}
 	
 	public void Finish() throws FileNotFoundException, IOException {
@@ -52,6 +51,8 @@ private static DBManager INSTANCE;
 				System.out.println("Tu veux la commande INSERT?");
 				break;
 			case "BATCHINSERT":
+				BATCHINSERTCommand batchInsert = new BATCHINSERTCommand(ch);
+				batchInsert.Execute();
 				System.out.println("Tu veux la commande BATCHINSERT?");
 				break;
 			case "SELECTMONO":

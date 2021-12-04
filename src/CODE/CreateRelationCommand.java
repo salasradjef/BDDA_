@@ -27,11 +27,13 @@ public class CreateRelationCommand {
 
 
     public void Execute() throws IOException {
+        /*All tests passed*/
         FileManager fm = FileManager.getInstance();
         Catalog catalog = Catalog.getInstance();
         PageId headerPage = fm.createHeaderPage();
 
         RelationInfo rel = new RelationInfo(this.relName,this.nbr_col,this.col,headerPage);
         catalog.AddRelation(rel);
+        System.out.println("La relation "+ this.relName+" à bien été ajoutée");
     }
 }

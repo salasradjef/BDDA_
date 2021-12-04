@@ -12,9 +12,7 @@ public class FileManager {
 	public static FileManager getInstance() {
 		if (INSTANCE == null) {
 			INSTANCE = new FileManager();
-
 		}
-
 		return INSTANCE;
 	}
 
@@ -35,8 +33,6 @@ public class FileManager {
 			buff.position(0);
 			buff.putInt(Integer.valueOf(PID.getFileIdx()));
 			buff.putInt(Integer.valueOf(PID.getPageIdx()));
-
-
 		} else {
 			buff.position(8);
 			buff.putInt(Integer.valueOf(PID.getFileIdx()));
@@ -48,8 +44,6 @@ public class FileManager {
 	public PageId createHeaderPage() throws IOException {
 		DiskManager disk = DiskManager.getInstance();
 		PageId header = disk.AllocPage();
-
-
 		PageId fac = new PageId(-1, 0);
 		BufferManager BM = BufferManager.getInstance();
 
@@ -137,8 +131,6 @@ public class FileManager {
 				break;
 			}
 		}
-
-
 		return firstEmpty;
 	}
 
@@ -234,7 +226,7 @@ public class FileManager {
 		buff.position(16 + (4 * relinfo.getSlotCount()));
 		for (int i = 0; i < relinfo.getSlotCount(); i++) {
 			if (ID_RECORDs.contains(i)) {
-				Record rec = new Record(relinfo);
+				Record rec = new Record(relinfo,null);
 				rec.readFromBuffer(buff, 16 + (4 * relinfo.getSlotCount()) + (i * relinfo.getRecordSize()));
 				listRecords.add(rec);
 			}
@@ -242,6 +234,8 @@ public class FileManager {
 		return listRecords;
 	}
 
+
+	/*----------------------------------------------------API--------------------------------------*/
 	public Rid InsertRecordIntoRelation(RelationInfo relinfo, Record record) throws IOException {
 		PageId headerPage = relinfo.getHeaderPageId();
 		PageId freePage = INSTANCE.getFreeDataPageId(relinfo);

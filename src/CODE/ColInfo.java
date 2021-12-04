@@ -1,7 +1,9 @@
 package CODE;
 
 
-public class ColInfo {
+import java.io.Serializable;
+
+public class ColInfo implements Serializable {
 	private String col_name;
 	private String col_type;
 	

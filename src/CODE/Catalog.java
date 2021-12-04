@@ -16,12 +16,12 @@ public class Catalog implements Serializable {
 	private static Catalog INSTANCE;
 	private ArrayList<RelationInfo> rel_info;
 	private int cmp;
+
+
 	public static Catalog getInstance() {
 		if(INSTANCE == null) {
 			INSTANCE = new Catalog();
-			
 		}
-		
 		return INSTANCE;
 	}
 	
@@ -49,8 +49,9 @@ public class Catalog implements Serializable {
 			INSTANCE = (Catalog) object.readObject();
 			object.close();	
 		}
-		
 	}
+
+
 	public void Finish() throws FileNotFoundException, IOException {
 		String path = DBParams.DBPath + "\\Catalog.def";
 		ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(path));
@@ -61,6 +62,19 @@ public class Catalog implements Serializable {
 	public void reset(){
 		cmp=0;
 		rel_info.clear();
+	}
+
+	public RelationInfo getRelationWithName(String name){
+		boolean trv = false;
+		int i=0;
+		while(!trv && i<this.cmp){
+			if(this.rel_info.get(i).getName().equals(name)){
+				trv = false;
+				return this.rel_info.get(i);
+			}
+		}
+
+		return null;
 	}
 	
 }

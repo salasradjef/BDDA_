@@ -13,6 +13,7 @@ public class DROPDBCommand {
         BM.FlushAll();
         catalog.reset();
         disk.clean_all();
+        System.out.println("DROPDB effectué");
 
     }
 }

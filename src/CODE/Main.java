@@ -17,7 +17,11 @@ public class Main {
 
 		DBManager dbM = DBManager.getInstance();
 		Scanner sc = new Scanner(System.in);
-		dbM.Init();
+
+		Catalog cat = Catalog.getInstance();
+
+		//dbM.Init();
+
 		while(true){
 			String cmd = sc.nextLine();
 			if(cmd.equals("QUIT")){
@@ -27,6 +31,7 @@ public class Main {
 			}
 			dbM.ProcessCommand(cmd);
 		}
+
 		
 		
 		
