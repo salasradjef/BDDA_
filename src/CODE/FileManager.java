@@ -10,7 +10,7 @@ public class FileManager {
 	private static FileManager INSTANCE;
 
 	public static FileManager getInstance() {
-		if(INSTANCE == null) {
+		if (INSTANCE == null) {
 			INSTANCE = new FileManager();
 
 		}
@@ -19,26 +19,25 @@ public class FileManager {
 	}
 
 
+	public PageId readPageIdFromPageBuffer(ByteBuffer buff, boolean first) {
 
-	public PageId readPageIdFromPageBuffer(ByteBuffer buff,boolean first) {
-
-		if(first) {
+		if (first) {
 			buff.position(0);
 			return new PageId(buff.getInt(), buff.getInt());
-		}else {
+		} else {
 			buff.position(8);
 			return new PageId(buff.getInt(), buff.getInt());
 		}
 	}
 
-	public void writePageIdToPageBuffer(PageId PID,ByteBuffer buff,boolean first) {
-		if(first) {
+	public void writePageIdToPageBuffer(PageId PID, ByteBuffer buff, boolean first) {
+		if (first) {
 			buff.position(0);
 			buff.putInt(Integer.valueOf(PID.getFileIdx()));
 			buff.putInt(Integer.valueOf(PID.getPageIdx()));
 
 
-		}else {
+		} else {
 			buff.position(8);
 			buff.putInt(Integer.valueOf(PID.getFileIdx()));
 			buff.putInt(Integer.valueOf(PID.getPageIdx()));
@@ -51,19 +50,17 @@ public class FileManager {
 		PageId header = disk.AllocPage();
 
 
-		PageId fac = new PageId(-1,0);
+		PageId fac = new PageId(-1, 0);
 		BufferManager BM = BufferManager.getInstance();
 
 		byte[] a = BM.getPage(header);
 		ByteBuffer tmp = ByteBuffer.wrap(a);
 		writePageIdToPageBuffer(fac, tmp, true);
-		writePageIdToPageBuffer(fac,tmp,false);
+		writePageIdToPageBuffer(fac, tmp, false);
 		BM.FreePage(header, 1);
 
 		return header;
 	}
-
-
 
 
 	public PageId addDataPage(RelationInfo relInfo) throws IOException {
@@ -90,7 +87,7 @@ public class FileManager {
 
 
 		tmp2.position(16);
-		for(int i=0;i<relInfo.getSlotCount();i++) {
+		for (int i = 0; i < relInfo.getSlotCount(); i++) {
 			tmp2.putInt(0);
 		}
 		BM.FreePage(pageV, 1);
@@ -107,13 +104,14 @@ public class FileManager {
 
 		PageId firstEmpty = getInstance().readPageIdFromPageBuffer(sd, true);
 		byte[] ts = BM.getPage(firstEmpty);
-		ByteBuffer tsp = ByteBuffer.wrap(ts); int i=0;
+		ByteBuffer tsp = ByteBuffer.wrap(ts);
+		int i = 0;
 		BM.FreePage(firstEmpty, 0);
 
 
 		boolean trouve = false;
-		while(!trouve) {
-			if(i!=0) {
+		while (!trouve) {
+			if (i != 0) {
 				firstEmpty = getInstance().readPageIdFromPageBuffer(tsp, false);
 				ts = BM.getPage(firstEmpty);
 				tsp = ByteBuffer.wrap(ts);
@@ -121,21 +119,21 @@ public class FileManager {
 			}
 
 			boolean caseVIDE = false;
-			if(firstEmpty.getFileIdx() != -1 && firstEmpty.getPageIdx() !=0) {
-				int cmp=0;
-				while(!caseVIDE) {
+			if (firstEmpty.getFileIdx() != -1 && firstEmpty.getPageIdx() != 0) {
+				int cmp = 0;
+				while (!caseVIDE) {
 					tsp.position(16);
-					if(tsp.get(cmp) == 0) {
+					if (tsp.get(cmp) == 0) {
 						caseVIDE = true;
 						trouve = true;
 						break;
 					}
 				}
-			}else {
+			} else {
 				firstEmpty = getInstance().addDataPage(relInfo);
 				break;
 			}
-			if(caseVIDE && trouve) {
+			if (caseVIDE && trouve) {
 				break;
 			}
 		}
@@ -144,7 +142,7 @@ public class FileManager {
 		return firstEmpty;
 	}
 
-	public Rid writeRecordToDataPage(RelationInfo relInfo , Record record, PageId PID) throws IOException {
+	public Rid writeRecordToDataPage(RelationInfo relInfo, Record record, PageId PID) throws IOException {
 		BufferManager BM = BufferManager.getInstance();
 		byte[] a = BM.getPage(PID);
 		ByteBuffer buff = ByteBuffer.wrap(a);
@@ -152,19 +150,20 @@ public class FileManager {
 		int sltID = 0;
 		int s;
 		Rid fin = null;
-		while(!trv) {
+		while (!trv) {
 			buff.position(16);
-			for(int i=0;i<relInfo.getSlotCount();i++) {
+			for (int i = 0; i < relInfo.getSlotCount(); i++) {
 				s = buff.getInt();
-				if(s == 0 ) {
+				if (s == 0) {
 					trv = true;
 					sltID = i;
 				}
 			}
 		}
 
-		int z; int pos;
-		for(int i=0;i<=sltID;i++) {
+		int z;
+		int pos;
+		for (int i = 0; i <= sltID; i++) {
 			z = buff.getInt();
 			if (i == sltID) {
 				pos = buff.position();
@@ -174,37 +173,37 @@ public class FileManager {
 		}
 		BM.FreePage(PID, 1);
 
-		if(!isNotFull(PID,relInfo)) {
+		if (!isNotFull(PID, relInfo)) {
 			ByteBuffer headerPage_buff = byteToBuffer(BM.getPage(relInfo.getHeaderPageId()));
-			PageId firstFull = readPageIdFromPageBuffer(headerPage_buff,true);
-			writePageIdToPageBuffer(PID,headerPage_buff,false);
-			BM.FreePage(relInfo.getHeaderPageId(),1);
+			PageId firstFull = readPageIdFromPageBuffer(headerPage_buff, true);
+			writePageIdToPageBuffer(PID, headerPage_buff, false);
+			BM.FreePage(relInfo.getHeaderPageId(), 1);
 
 			ByteBuffer firstFull_buff = byteToBuffer(BM.getPage(firstFull));
-			writePageIdToPageBuffer(PID,firstFull_buff,true);
-			BM.FreePage(firstFull,1);
+			writePageIdToPageBuffer(PID, firstFull_buff, true);
+			BM.FreePage(firstFull, 1);
 
 			ByteBuffer PID_buff = byteToBuffer(BM.getPage(PID));
-			writePageIdToPageBuffer(firstFull,PID_buff,false);
-			writePageIdToPageBuffer(relInfo.getHeaderPageId(),PID_buff,true);
+			writePageIdToPageBuffer(firstFull, PID_buff, false);
+			writePageIdToPageBuffer(relInfo.getHeaderPageId(), PID_buff, true);
 
-			BM.FreePage(PID,1);
+			BM.FreePage(PID, 1);
 		}
 
 		return fin;
 	}
 
 
-	public boolean isNotFull(PageId PID,RelationInfo rel) throws IOException {
+	public boolean isNotFull(PageId PID, RelationInfo rel) throws IOException {
 		boolean trv = false;
 		BufferManager BM = BufferManager.getInstance();
 		ByteBuffer buff = byteToBuffer(BM.getPage(PID));
 		BM.FreePage(PID, 0);
 		buff.position(16);
-		int s=-1;
-		for(int i = 0 ;i<rel.getSlotCount();i++) {
+		int s = -1;
+		for (int i = 0; i < rel.getSlotCount(); i++) {
 			s = buff.getInt();
-			if(s == 0) {
+			if (s == 0) {
 				trv = true;
 				break;
 			}
@@ -218,22 +217,22 @@ public class FileManager {
 	}
 
 
-	public ArrayList<Record> getRecordsInDataPage(RelationInfo relinfo,PageId PID) throws IOException{
+	public ArrayList<Record> getRecordsInDataPage(RelationInfo relinfo, PageId PID) throws IOException {
 		ArrayList<Record> listRecords = new ArrayList<>();
-		ArrayList <Integer>  ID_RECORDs = new ArrayList<>();
+		ArrayList<Integer> ID_RECORDs = new ArrayList<>();
 		BufferManager BM = BufferManager.getInstance();
 		ByteBuffer buff = byteToBuffer(BM.getPage(PID));
-		BM.FreePage(PID,0);
+		BM.FreePage(PID, 0);
 		buff.position(16);
 		int s;
-		for(int i=0;i<relinfo.getSlotCount();i++) {
+		for (int i = 0; i < relinfo.getSlotCount(); i++) {
 			s = buff.getInt();
-			if(s==1) {
+			if (s == 1) {
 				ID_RECORDs.add(i);
 			}
 		}
-		buff.position(16+(4*relinfo.getSlotCount()));
-		for(int i = 0;i<relinfo.getSlotCount();i++) {
+		buff.position(16 + (4 * relinfo.getSlotCount()));
+		for (int i = 0; i < relinfo.getSlotCount(); i++) {
 			if (ID_RECORDs.contains(i)) {
 				Record rec = new Record(relinfo);
 				rec.readFromBuffer(buff, 16 + (4 * relinfo.getSlotCount()) + (i * relinfo.getRecordSize()));
@@ -246,7 +245,7 @@ public class FileManager {
 	public Rid InsertRecordIntoRelation(RelationInfo relinfo, Record record) throws IOException {
 		PageId headerPage = relinfo.getHeaderPageId();
 		PageId freePage = INSTANCE.getFreeDataPageId(relinfo);
-		Rid recordId = INSTANCE.writeRecordToDataPage(relinfo,record,freePage);
+		Rid recordId = INSTANCE.writeRecordToDataPage(relinfo, record, freePage);
 		return recordId;
 	}
 
@@ -257,9 +256,9 @@ public class FileManager {
 
 		PageId headerPage = relinfo.getHeaderPageId();
 		ByteBuffer headerPage_Buffer = INSTANCE.byteToBuffer(BM.getPage(headerPage));
-		PageId firstEmpty = INSTANCE.readPageIdFromPageBuffer(headerPage_Buffer,true); //Premiere page pleine
-		PageId firstFull = INSTANCE.readPageIdFromPageBuffer(headerPage_Buffer,false);
-		BM.FreePage(headerPage,0);
+		PageId firstEmpty = INSTANCE.readPageIdFromPageBuffer(headerPage_Buffer, true); //Premiere page pleine
+		PageId firstFull = INSTANCE.readPageIdFromPageBuffer(headerPage_Buffer, false);
+		BM.FreePage(headerPage, 0);
 
 		ArrayList<Record> tmpPid1 = new ArrayList<>();
 		ArrayList<Record> tmpPid2 = new ArrayList<>();
@@ -268,26 +267,26 @@ public class FileManager {
 
 
 		/*Boucle qui permet de charger la listes des records qui se trouve dans les pages non pleines*/
-		while(true){
+		while (true) {
 			ByteBuffer buffer = INSTANCE.byteToBuffer(BM.getPage(firstEmpty));
-			PageId next = readPageIdFromPageBuffer(buffer,false);
-			tmpPid1.addAll(getRecordsInDataPage(relinfo,firstEmpty));
-			BM.FreePage(firstEmpty,0);
+			PageId next = readPageIdFromPageBuffer(buffer, false);
+			tmpPid1.addAll(getRecordsInDataPage(relinfo, firstEmpty));
+			BM.FreePage(firstEmpty, 0);
 			firstEmpty = next;
 
-			if(firstEmpty.getFileIdx() == 0 && firstEmpty.getPageIdx() ==-1 ){
+			if (firstEmpty.getFileIdx() == 0 && firstEmpty.getPageIdx() == -1) {
 				break;
 			}
 		}
 		/*Boucle qui permet de charger la listes des records qui se trouve dans les pages pleines*/
-		while(true){
+		while (true) {
 			ByteBuffer buff2 = INSTANCE.byteToBuffer(BM.getPage(firstFull));
-			PageId next2 = readPageIdFromPageBuffer(buff2,false);
-			tmpPid2.addAll(getRecordsInDataPage(relinfo,firstFull));
-			BM.FreePage(firstFull,0);
+			PageId next2 = readPageIdFromPageBuffer(buff2, false);
+			tmpPid2.addAll(getRecordsInDataPage(relinfo, firstFull));
+			BM.FreePage(firstFull, 0);
 			firstFull = next2;
 
-			if(firstFull.getFileIdx() == -1 && firstFull.getPageIdx() == 0){
+			if (firstFull.getFileIdx() == -1 && firstFull.getPageIdx() == 0) {
 				break;
 			}
 
@@ -296,7 +295,7 @@ public class FileManager {
 
 		tmpPid1.addAll(tmpPid2);
 
-		return  tmpPid1;
+		return tmpPid1;
 
 	}
 
