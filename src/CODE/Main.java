@@ -38,7 +38,7 @@ public class Main {
 	
 		
 		
-		FileManager a = FileManager.getInstance();
+		/*FileManager a = FileManager.getInstance();
 		DiskManager disk = DiskManager.getInstance();
 		BufferManager BM = BufferManager.getInstance();
 		
@@ -81,6 +81,8 @@ public class Main {
 		BM.FreePage(Page, 1);
 		
 		System.out.println(a.isNotFull(Page, relInfo));*/
+
+	
 		
 		
 		
