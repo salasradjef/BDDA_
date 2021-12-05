@@ -206,7 +206,7 @@ public class FileManager {
 				ID_RECORDs.add(i);
 			}
 		}
-		buff.position(16 + (4 * relinfo.getSlotCount()));
+		buff.position(16 +  relinfo.getSlotCount());
 
 		for (int i = 0; i < relinfo.getSlotCount(); i++) {
 			if (ID_RECORDs.contains(i)) {
@@ -235,10 +235,11 @@ public class FileManager {
 	}
 
 
-	/*public ArrayList<Record> getAllRecords(RelationInfo relinfo) throws IOException {
+	public ArrayList<Record> getAllRecords(RelationInfo relinfo) throws IOException {
+
 		ArrayList<Record> listRecord = new ArrayList<>();
 		BufferManager BM = BufferManager.getInstance();
-
+		BM.FlushAll();
 		PageId headerPage = relinfo.getHeaderPageId();
 		ByteBuffer headerPage_Buffer = INSTANCE.byteToBuffer(BM.getPage(headerPage));
 		PageId firstEmpty = INSTANCE.readPageIdFromPageBuffer(headerPage_Buffer, true); //Premiere page pleine
@@ -251,7 +252,7 @@ public class FileManager {
 
 
 
-		*//*Boucle qui permet de charger la listes des records qui se trouve dans les pages non pleines*//*
+		//*Boucle qui permet de charger la listes des records qui se trouve dans les pages non pleines*//*
 		while (true) {
 			ByteBuffer buffer = INSTANCE.byteToBuffer(BM.getPage(firstEmpty));
 			PageId next = readPageIdFromPageBuffer(buffer, false);
@@ -263,7 +264,7 @@ public class FileManager {
 				break;
 			}
 		}
-		*//*Boucle qui permet de charger la listes des records qui se trouve dans les pages pleines*//*
+		//*Boucle qui permet de charger la listes des records qui se trouve dans les pages pleines*//*
 		while (true) {
 			ByteBuffer buff2 = INSTANCE.byteToBuffer(BM.getPage(firstFull));
 			PageId next2 = readPageIdFromPageBuffer(buff2, false);
@@ -282,7 +283,7 @@ public class FileManager {
 
 		return tmpPid1;
 
-	}*/
+	}
 
 
 }

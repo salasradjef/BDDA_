@@ -55,7 +55,8 @@ private static DBManager INSTANCE;
 				System.out.println("Tu veux la commande BATCHINSERT?");
 				break;
 			case "SELECTMONO":
-				System.out.println("Tu veux la commande SELECTMONO?");
+				SELECTMONOCommand select = new SELECTMONOCommand(ch);
+				select.Execute();
 				break;
 			case "DELETE":
 				System.out.println("Tu veux la commande DELETE");
