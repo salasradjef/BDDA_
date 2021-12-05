@@ -82,7 +82,7 @@ public class FileManager {
 		writePageIdToPageBuffer(headerPage, tmp2, false);
 		tmp2.position(0);
 		for(int i=0;i< relInfo.getSlotCount();i++){
-			tmp2.putInt(0);
+			tmp2.put((byte)0);
 		}
 		BM.FreePage(pageV, 1);
 		return pageV;
@@ -123,18 +123,18 @@ public class FileManager {
 		ByteBuffer buff = byteToBuffer(BM.getPage(PID));
 
 		buff.position(16);
-		int z = 0 ; int sltVide = -1;
+		byte z = 0 ; int sltVide = -1;
 		for(int i=0;i<relInfo.getSlotCount();i++) {
-			z = buff.getInt();
+			z = buff.get();
 			if(z == 0){
 				sltVide = i;
-				buff.position(buff.position()-4);
-				buff.putInt(1);
+				buff.position(buff.position()-1);
+				buff.put((byte)1);
 				break;
 			}
 		} //Trouver la case vide du BitMap et la mettre a 1
 		Rid rid = null;
-		buff.position(16+(4* relInfo.getSlotCount()));
+		buff.position(16+ relInfo.getSlotCount());
 		int pos=-1;
 		for(int i = 0;i< relInfo.getSlotCount();i++){
 			if(i == sltVide){
@@ -146,14 +146,26 @@ public class FileManager {
 			buff.position(buff.position() + relInfo.getRecordSize());
 
 		}
+
+
+
+		//Voir si la page est devenue pleine
+		buff.position(16); boolean trv = true;
+		byte s = -1;
+		for(int i=0;i< relInfo.getSlotCount();i++){
+			s = buff.get();
+			if(s == 0){
+				trv = false;
+				break;
+			}
+		}
 		BM.FreePage(PID, 1);
-
-
 
 
 		//Deplacement ou pas de la page vers la liste des pages pleines
 
-		if (!isNotFull(PID, relInfo)) {
+		if (trv) {
+
 			ByteBuffer headerPage_buff = byteToBuffer(BM.getPage(relInfo.getHeaderPageId()));
 			PageId firstFull = readPageIdFromPageBuffer(headerPage_buff, true);
 			writePageIdToPageBuffer(PID, headerPage_buff, false);
@@ -169,29 +181,8 @@ public class FileManager {
 
 			BM.FreePage(PID, 1);
 		}
-
+		BM.FreePage(PID, 1);
 		return rid;
-	}
-
-
-	public boolean isNotFull(PageId PID, RelationInfo rel) throws IOException {
-		/*Tested*/
-		boolean trv = false;
-		BufferManager BM = BufferManager.getInstance();
-
-		ByteBuffer buff = byteToBuffer(BM.getPage(PID));
-
-		BM.FreePage(PID, 0);
-		buff.position(16);
-		int s = -1;
-		for (int i = 0; i < rel.getSlotCount(); i++) {
-			s = buff.getInt();
-			if (s == 0) {
-				trv = true;
-				break;
-			}
-		}
-		return trv;
 	}
 
 
@@ -207,10 +198,10 @@ public class FileManager {
 		ByteBuffer buff = byteToBuffer(BM.getPage(PID));
 		BM.FreePage(PID, 0);
 		buff.position(16);
-		int s;
+		byte s;
 
 		for (int i = 0; i < relinfo.getSlotCount(); i++) {
-			s = buff.getInt();
+			s = buff.get();
 			if (s == 1) {
 				ID_RECORDs.add(i);
 			}
@@ -223,7 +214,7 @@ public class FileManager {
 				String[] values = new String[relinfo.getNbr_col()];
 				Record rec = new Record(relinfo,values);
 
-				rec.readFromBuffer(buff, 16 + (4 * relinfo.getSlotCount()) + (i * relinfo.getRecordSize()));
+				rec.readFromBuffer(buff, 16 +  relinfo.getSlotCount() + (i * relinfo.getRecordSize()));
 
 				listRecords.add(rec);
 			}
@@ -236,8 +227,10 @@ public class FileManager {
 	/*----------------------------------------------------API--------------------------------------*/
 	public Rid InsertRecordIntoRelation(RelationInfo relinfo, Record record) throws IOException {
 		/*Tested*/
+		BufferManager BM = BufferManager.getInstance();
 		PageId freePage = INSTANCE.getFreeDataPageId(relinfo);
 		Rid recordId = INSTANCE.writeRecordToDataPage(relinfo, record, freePage);
+		BM.FlushAll();
 		return recordId;
 	}
 

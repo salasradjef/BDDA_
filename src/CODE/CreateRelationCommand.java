@@ -10,6 +10,7 @@ public class CreateRelationCommand {
     private ColInfo[] col;
 
     public CreateRelationCommand(String command){
+        /*Tested*/
         String[] infos = command.split(" ");
         this.relName = infos[2]; //set le nom de la relation
         String  between = infos[3].split("[\\(\\)]")[1];

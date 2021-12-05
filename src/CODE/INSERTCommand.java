@@ -9,6 +9,7 @@ public class INSERTCommand {
     private Record record;
 
     public INSERTCommand(String ch){
+        /*Tested*/
         String[] parsing = ch.split(" ");
         Catalog cat = Catalog.getInstance();
         this.rel = cat.getRelationWithName(parsing[2]);

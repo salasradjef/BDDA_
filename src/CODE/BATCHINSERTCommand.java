@@ -11,6 +11,7 @@ public class BATCHINSERTCommand {
     private ArrayList<String> csvValues;
 
     public BATCHINSERTCommand(String ch) {
+        /*Tested*/
         String[] parsing = ch.split(" ");
         Catalog cat = Catalog.getInstance();
         this.rel = cat.getRelationWithName(parsing[2]);
@@ -25,7 +26,6 @@ public class BATCHINSERTCommand {
             e.printStackTrace();
         }
     }
-
 
     public void Execute() throws IOException {
         if(this.rel != null){

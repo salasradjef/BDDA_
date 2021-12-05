@@ -47,7 +47,7 @@ private static DBManager INSTANCE;
 			case "INSERT":
 				INSERTCommand insert = new INSERTCommand(ch);
 				insert.Execute();
-				System.out.println("Tu veux la commande INSERT?");
+
 				break;
 			case "BATCHINSERT":
 				BATCHINSERTCommand batchInsert = new BATCHINSERTCommand(ch);
