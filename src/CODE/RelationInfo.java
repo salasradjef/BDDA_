@@ -40,7 +40,7 @@ public class RelationInfo implements Serializable {
 		
 		//Calcul du nombre de cases
 		int sizeOFPageId = 8;
-		this.slotCount = (DBParams.pageSize - sizeOFPageId*2) / (this.recordSize+1);
+		this.slotCount = (DBParams.pageSize - sizeOFPageId*2) / (this.recordSize+4);
 		
 		
 		

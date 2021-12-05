@@ -1,40 +1,34 @@
 package CODE;
 
-import java.io.*;
-import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 public class Perso {
 
-	public static void main(String[] args) {
-		/*String fileName = "C:\\Users\\INFOTECH\\eclipse-workspace\\IDE_PROJET_RADJEF_NAITAIMER\\src\\S1.csv";
-		List<String> records = new ArrayList<>();
-		try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-			String line;
-			while ((line = br.readLine()) != null) {
-				records.add(line);
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		System.out.println(records.get(0));*/
+	public static void main(String args[]) {
+		ByteBuffer buff = ByteBuffer.allocate(200);
+		buff.putInt(2);
+		buff.putInt(1);
+		buff.putInt(0);
+		buff.putInt(7);
+		int z=-1;
+		buff.position(0);
+		for(int i=0;i<4;i++){
+			z = buff.getInt();
 
-		String cmd ="BATCHINSERT INTO S FROM FILE S1.csv";
-		String cmdss[] = cmd.split(" ");
-		for(int i=0;i<cmdss.length;i++){
-			System.out.print(i);
-			System.out.println(cmdss[i]);
+			if(z == 0){
+				buff.position(buff.position() - 4);
+				buff.putInt(17);
+
+			}
+		}
+
+
+
+
+		buff.position(0);
+		for(int i = 0;i<4;i++){
+			System.out.println(buff.getInt());
 		}
 
 	}
-	
-
-
 }

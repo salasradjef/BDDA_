@@ -43,7 +43,6 @@ private static DBManager INSTANCE;
 			case "DROPDB":
 				DROPDBCommand drop = new DROPDBCommand();
 				drop.Execute();
-
 				break;
 			case "INSERT":
 				INSERTCommand insert = new INSERTCommand(ch);

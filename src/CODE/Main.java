@@ -1,8 +1,10 @@
 package CODE;
 
 
+import javax.management.relation.Relation;
 import java.io.*;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -13,6 +15,7 @@ public class Main {
 		DBParams.pageSize =4096;
 		DBParams.maxPagesPerFile = 4; 
 		DBParams.frameCount = 2;
+
 
 
 		DBManager dbM = DBManager.getInstance();
@@ -31,9 +34,33 @@ public class Main {
 			}
 			dbM.ProcessCommand(cmd);
 		}
+		/*Catalog cat = Catalog.getInstance();
+		DiskManager disk = DiskManager.getInstance();
+		FileManager FM = FileManager.getInstance();
+		*//*----------------------------------------------------------*//*
 
-		
-		
+
+
+		PageId headerPage = FM.createHeaderPage(); //Creation d'une headerPage
+		ColInfo[] col = new ColInfo[2];
+		col[0] = new ColInfo("A","int");
+		col[1] = new ColInfo("B","int");
+		RelationInfo rel = new RelationInfo("R",2,col,headerPage);
+		cat.AddRelation(rel);
+		String[] values = {"1", "2"};
+		Record record = new Record(rel,values);
+		String [] values2 = {"3","4"};
+		Record record2 = new Record(rel,values2);
+
+
+
+		Rid rid =FM.InsertRecordIntoRelation(rel,record);
+		Rid rid2 = FM.InsertRecordIntoRelation(rel,record2);*/
+		/*ArrayList<Record> listOfRecords = new ArrayList<>();
+		listOfRecords = FM.getRecordsInDataPage(rel,rid.getRid());
+		System.out.println(listOfRecords);
+		cat.Finish();*/
+
 		
 	}
 

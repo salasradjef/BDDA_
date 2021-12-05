@@ -11,13 +11,16 @@ public class Record {
 	
 	public Record(RelationInfo rel,String[] values) {
 		this.setRelInfo(rel);
-		this.values = values;
+		this.values = new String[relInfo.getNbr_col()];
+		for(int i = 0 ;i<this.values.length;i++) {
+			this.values[i] = values[i];
+		}
 	}
 	
 	
 	public void writeToBuffer(ByteBuffer buff, int position) {
 		buff.position(position);
-		for(int i=0;i<=relInfo.getNbr_col();i++) {
+		for(int i=0;i<relInfo.getNbr_col();i++) {
 			String values_type = relInfo.getCol()[i].getCol_type();
 			String[] pw = values_type.split("string");
 
@@ -30,9 +33,9 @@ public class Record {
 			}
 			
 			if(pw[0].equals("string")) {
-				for(int j=0;j<= Integer.parseInt(pw[1]);j++ ) {
+				for(int j=0;j< Integer.parseInt(pw[1]);j++ ) {
 					String[] sp = values[i].split("");
-					for(int z=0;z<=sp.length;z++) {
+					for(int z=0;z<sp.length;z++) {
 						buff.putChar(sp[z].charAt(0));
 					}
 					
@@ -46,7 +49,7 @@ public class Record {
 	
 	public void readFromBuffer(ByteBuffer buff,int position) {
 		buff.position(position);
-		for(int i=0;i<=relInfo.getNbr_col();i++) {
+		for(int i=0;i<relInfo.getNbr_col();i++) {
 			String values_type = relInfo.getCol()[i].getCol_type();
 			String[] pw = values_type.split("string");
 
@@ -63,7 +66,7 @@ public class Record {
 			
 			if(pw[0].equals("string")) {
 				StringBuffer sb = new StringBuffer();
-				for(int j=0;j<= Integer.parseInt(pw[1]);j++ ) {
+				for(int j=0;j< Integer.parseInt(pw[1]);j++ ) {
 					buff.getChar();
 					sb.append(buff.getChar());
 				}

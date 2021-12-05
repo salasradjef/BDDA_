@@ -56,7 +56,7 @@ public class DiskManager  {
 		};
 		
 		
-		//
+
 		String[] paths = f.list(filter1);
 		
 		
@@ -88,8 +88,6 @@ public class DiskManager  {
 				rf.close();
 				PageId pid = new PageId(FileId, 0);
 				return pid;
-				
-				
 				
 			}
 			
