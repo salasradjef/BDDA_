@@ -92,11 +92,13 @@ public class FileManager {
 
 
 	public PageId getFreeDataPageId(RelationInfo rel) throws IOException {
+
 		/*Tested*/
 		BufferManager BM = BufferManager.getInstance();
 		PageId headerPage = rel.getHeaderPageId();
 		ByteBuffer headerPageBuffer = byteToBuffer(BM.getPage(headerPage));
 		PageId firstEmpty = INSTANCE.readPageIdFromPageBuffer(headerPageBuffer,true);
+
 		BM.FreePage(headerPage,0);
 
 		if(firstEmpty.getFileIdx() == -1 && firstEmpty.getPageIdx() ==0){
@@ -226,7 +228,7 @@ public class FileManager {
 
 	/*----------------------------------------------------API--------------------------------------*/
 	public Rid InsertRecordIntoRelation(RelationInfo relinfo, Record record) throws IOException {
-		/*Tested*/
+		/*Fixed*/
 		BufferManager BM = BufferManager.getInstance();
 		PageId freePage = INSTANCE.getFreeDataPageId(relinfo);
 		Rid recordId = INSTANCE.writeRecordToDataPage(relinfo, record, freePage);
@@ -236,6 +238,7 @@ public class FileManager {
 
 
 	public ArrayList<Record> getAllRecords(RelationInfo relinfo) throws IOException {
+		/*Fixed*/
 
 		ArrayList<Record> listRecord = new ArrayList<>();
 		BufferManager BM = BufferManager.getInstance();
@@ -254,27 +257,31 @@ public class FileManager {
 
 		//*Boucle qui permet de charger la listes des records qui se trouve dans les pages non pleines*//*
 		while (true) {
-			ByteBuffer buffer = INSTANCE.byteToBuffer(BM.getPage(firstEmpty));
-			PageId next = readPageIdFromPageBuffer(buffer, false);
-			tmpPid1.addAll(getRecordsInDataPage(relinfo, firstEmpty));
-			BM.FreePage(firstEmpty, 0);
-			firstEmpty = next;
-
-			if (firstEmpty.getFileIdx() == 0 && firstEmpty.getPageIdx() == -1) {
+			if (firstEmpty.getFileIdx() == -1 && firstEmpty.getPageIdx() == 0) {
 				break;
 			}
+			ByteBuffer buffer = INSTANCE.byteToBuffer(BM.getPage(firstEmpty));
+			PageId next = readPageIdFromPageBuffer(buffer, false);
+			BM.FreePage(firstEmpty, 0);
+			tmpPid1.addAll(getRecordsInDataPage(relinfo, firstEmpty));
+
+			firstEmpty = next;
+
+
 		}
 		//*Boucle qui permet de charger la listes des records qui se trouve dans les pages pleines*//*
 		while (true) {
-			ByteBuffer buff2 = INSTANCE.byteToBuffer(BM.getPage(firstFull));
-			PageId next2 = readPageIdFromPageBuffer(buff2, false);
-			tmpPid2.addAll(getRecordsInDataPage(relinfo, firstFull));
-			BM.FreePage(firstFull, 0);
-			firstFull = next2;
-
 			if (firstFull.getFileIdx() == -1 && firstFull.getPageIdx() == 0) {
 				break;
 			}
+
+			ByteBuffer buff2 = INSTANCE.byteToBuffer(BM.getPage(firstFull));
+			PageId next2 = readPageIdFromPageBuffer(buff2, false);
+			BM.FreePage(firstFull, 0);
+
+			tmpPid2.addAll(getRecordsInDataPage(relinfo, firstFull));
+			firstFull = next2;
+
 
 		}
 

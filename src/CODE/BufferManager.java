@@ -96,11 +96,13 @@ public class BufferManager {
 		for (int i = 0; i < cases; i++) {
 			if(bpool[i].getDirty()!=0) {
 				disk.WritePage(bpool[i].getPID(), bpool[i].getBuff());
+				bpool[i].setPID(null);
 				bpool[i].setDirty(0);
 				bpool[i].setPin_count(0);
 				bpool[i].setBuff(new byte[DBParams.pageSize]);
 				bpool[i].setTemps_free(0);
 			}else {
+				bpool[i].setPID(null);
 				bpool[i].setBuff(new byte[DBParams.pageSize]);
 				bpool[i].setPin_count(0);
 				bpool[i].setTemps_free(0);

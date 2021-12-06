@@ -17,7 +17,7 @@ public class Main {
 		DBParams.frameCount = 2;
 
 
-
+/*
 		DBManager dbM = DBManager.getInstance();
 		Scanner sc = new Scanner(System.in);
 
@@ -33,14 +33,11 @@ public class Main {
 				break;
 			}
 			dbM.ProcessCommand(cmd);
-		}
-		/*Catalog cat = Catalog.getInstance();
+		}*/
+		Catalog cat = Catalog.getInstance();
 		DiskManager disk = DiskManager.getInstance();
 		FileManager FM = FileManager.getInstance();
-		*//*----------------------------------------------------------*//*
-
-
-
+		BufferManager BM = BufferManager.getInstance();
 		PageId headerPage = FM.createHeaderPage(); //Creation d'une headerPage
 		ColInfo[] col = new ColInfo[2];
 		col[0] = new ColInfo("A","int");
@@ -55,11 +52,16 @@ public class Main {
 
 
 		Rid rid =FM.InsertRecordIntoRelation(rel,record);
-		Rid rid2 = FM.InsertRecordIntoRelation(rel,record2);*/
-		/*ArrayList<Record> listOfRecords = new ArrayList<>();
-		listOfRecords = FM.getRecordsInDataPage(rel,rid.getRid());
-		System.out.println(listOfRecords);
-		cat.Finish();*/
+		Rid rid2 = FM.InsertRecordIntoRelation(rel,record2);
+
+
+		ArrayList<Record> listOfRecords = new ArrayList<>();
+		listOfRecords = FM.getAllRecords(rel);
+		System.out.println(listOfRecords.get(0).getValues()[0]);
+		System.out.println(listOfRecords.get(1).getValues()[0]);
+
+		//cat.Finish();*/
+
 
 		
 	}

@@ -26,13 +26,23 @@ public class SELECTMONOCommand {
         }
     }
 
+
+
+
     public void showRecordsValues(){
-        System.out.print("Total de records = " + this.all_records.size());
+        System.out.println("Total de records = " + this.all_records.size());
+        String[] values;
         for(int i=0;i<this.all_records.size();i++){
-            String[] values = this.all_records.get(i).getValues();
+             values= this.all_records.get(i).getValues();
+
             System.out.print(i + ")" + "Values = ");
             for(int j=0;j< values.length;j++){
-                System.out.print(values[j] + " : ");
+                if(i == values.length -1){
+                    System.out.print(values[j] + ".");
+
+                }else {
+                    System.out.print(values[j] + " : ");
+                }
             }
             System.out.println();
         }
