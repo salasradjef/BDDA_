@@ -17,17 +17,15 @@ public class Main {
 		DBParams.frameCount = 2;
 
 
-/*
-		DBManager dbM = DBManager.getInstance();
+	/*	DBManager dbM = DBManager.getInstance();
 		Scanner sc = new Scanner(System.in);
-
 		Catalog cat = Catalog.getInstance();
 
 		//dbM.Init();
 
 		while(true){
 			String cmd = sc.nextLine();
-			if(cmd.equals("QUIT")){
+			if(cmd.equals("EXIT")){
 				dbM.Finish();
 				System.out.println("bye");
 				break;
@@ -53,12 +51,16 @@ public class Main {
 
 		Rid rid =FM.InsertRecordIntoRelation(rel,record);
 		Rid rid2 = FM.InsertRecordIntoRelation(rel,record2);
-
-
+		String cmd = "SELECTMONO * FROM R WHERE A=1 AND B=2";
+		SELECTMONOCommand a = new SELECTMONOCommand(cmd);
+		a.Execute();
 		ArrayList<Record> listOfRecords = new ArrayList<>();
 		listOfRecords = FM.getAllRecords(rel);
-		System.out.println(listOfRecords.get(0).getValues()[0]);
-		System.out.println(listOfRecords.get(1).getValues()[0]);
+		/*System.out.print(listOfRecords.get(0).getValues()[0]);
+		System.out.println(listOfRecords.get(0).getValues()[1]);
+		System.out.print(listOfRecords.get(1).getValues()[0]);
+		System.out.println(listOfRecords.get(1).getValues()[1]);*/
+
 
 		//cat.Finish();*/
 
