@@ -1,6 +1,7 @@
 package CODE;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,44 +9,56 @@ import java.util.Iterator;
 public class SELECTMONOCommand {
         private RelationInfo rel;
         private ArrayList<Record> all_records;
-        private HashMap<String,String[]> conditions;
+        private ArrayList<String> column;
+        private ArrayList<String> values;
+        private ArrayList<Integer> posOfOP;
+        private String[] ops;
+      
 
-    public SELECTMONOCommand(String ch){
+    public SELECTMONOCommand(String ch) throws IOException {
         String nomDeRelation = ch.split(" ")[3];
         Catalog catalog = Catalog.getInstance();
         this.rel = catalog.getRelationWithName(nomDeRelation);
         this.all_records = new ArrayList<>();
-        conditions = new HashMap<>();
+
         //Conditions
         String afterWheres[] = ch.split("WHERE");
-        if(afterWheres.length >1){
+
+        if (afterWheres.length > 1) {
+            ops = new String[]{"=", "<", ">", "<=", ">=", "<>"};
+            int posOP = -1;
             String afterWhere = afterWheres[1];
             String[] condition = afterWhere.split("AND");
-            String[] ops = {"=","<",">","<=",">=","<>"};
-            for(int i = 0 ; i<condition.length;i++){
-                for(int j=0;j<ops.length;j++){
+            this.column = new ArrayList<>();
+            this.values = new ArrayList<>();
+            this.posOfOP = new ArrayList<>();
+            for(int i=0;i< condition.length;i++){
+                for(int j=0;j<ops.length;j++) {
                     if(condition[i].contains(ops[j])){
-                        String[] colmn = condition[i].split(ops[j]);
-                        conditions.put(ops[j],colmn);
+                        posOP = j;
                         break;
                     }
                 }
+                    String[] columnANDvalues = condition[i].split(ops[posOP]);
+                    posOfOP.add(posOP);
+                    column.add(columnANDvalues[0]);
+                    values.add(columnANDvalues[1]);
+
+
             }
 
         }
     }
-
     public void Execute() throws IOException {
         if(this.rel != null){
             FileManager FM = FileManager.getInstance();
             this.all_records= FM.getAllRecords(rel);
-            System.out.println(conditions.size());
-            if(conditions.size() > 0){
+
+            if(this.column.size() > 0){
                 showRecordsValuesConditions();
             }else {
                 showRecordsValues();
             }
-
 
         }else {
             System.err.println("La Relation demandé n'existe pas");
@@ -73,19 +86,32 @@ public class SELECTMONOCommand {
     }
 
     public void showRecordsValuesConditions(){
-        ArrayList<Record> tmp = new ArrayList<>();
-        ArrayList<String> cond = new ArrayList<>();
-        for ( String key : conditions.keySet() ) {
-            cond.add(key);
-        }
-        for(int i=0;i<cond.size();i++){
 
-            String[] params = this.conditions.get(cond.get(i));
+
+        ArrayList<Record> uCanShowThem = new ArrayList<>();
+        for(int i=0;i<this.all_records.size();i++){
+            String[] valuesOfRecord = this.all_records.get(i).getValues();
+            String op = this.ops[this.posOfOP.get(i)];
+            if(op.equals("=")){
+
+
+            }else if(op.equals("<")){
+
+            }else if(op.equals(">")){
+
+            }else if(op.equals("<=")){
+
+            }else if(op.equals(">=")){
+
+            }else if(op.equals("<>")){
+
+            }
+            boolean hesGood = false;
+
 
         }
-        System.out.println("Affichage avec conditions");
+
     }
-
 
     public int getIDofColumn(String column){
         ColInfo[] cl = rel.getCol();

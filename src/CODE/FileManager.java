@@ -33,12 +33,12 @@ public class FileManager {
 		/*Tested*/
 		if (first) {
 			buff.position(0);
-			buff.putInt(Integer.valueOf(PID.getFileIdx()));
-			buff.putInt(Integer.valueOf(PID.getPageIdx()));
+			buff.putInt(PID.getFileIdx());
+			buff.putInt(PID.getPageIdx());
 		} else {
 			buff.position(8);
-			buff.putInt(Integer.valueOf(PID.getFileIdx()));
-			buff.putInt(Integer.valueOf(PID.getPageIdx()));
+			buff.putInt(PID.getFileIdx());
+			buff.putInt(PID.getPageIdx());
 		}
 
 	}
@@ -240,7 +240,6 @@ public class FileManager {
 	public ArrayList<Record> getAllRecords(RelationInfo relinfo) throws IOException {
 		/*Fixed*/
 
-		ArrayList<Record> listRecord = new ArrayList<>();
 		BufferManager BM = BufferManager.getInstance();
 		BM.FlushAll();
 		PageId headerPage = relinfo.getHeaderPageId();
@@ -251,7 +250,6 @@ public class FileManager {
 
 		ArrayList<Record> tmpPid1 = new ArrayList<>();
 		ArrayList<Record> tmpPid2 = new ArrayList<>();
-		ArrayList<Record> ListOfRecords = new ArrayList<>();
 
 
 
