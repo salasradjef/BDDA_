@@ -3,6 +3,7 @@ package CODE;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -25,7 +26,7 @@ public class SELECTMONOCommand {
         String afterWheres[] = ch.split("WHERE");
 
         if (afterWheres.length > 1) {
-            ops = new String[]{"=", "<", ">", "<=", ">=", "<>"};
+            ops = new String[]{"<=", ">=","=","<", ">", "<>"};
             int posOP = -1;
             String afterWhere = afterWheres[1];
             String[] condition = afterWhere.split("AND");
@@ -55,7 +56,10 @@ public class SELECTMONOCommand {
             this.all_records= FM.getAllRecords(rel);
 
             if(this.column.size() > 0){
-                showRecordsValues(GetRecordsConditions());
+                ArrayList<Record> tmp = GetRecordsConditions();
+
+                showRecordsValues(tmp);
+
             }else {
                 showRecordsValues(this.all_records);
             }
@@ -67,7 +71,7 @@ public class SELECTMONOCommand {
 
 
     public void showRecordsValues(ArrayList<Record> listOfRecord){
-        System.out.println("Total de records = " + this.all_records.size());
+        System.out.println("Total de records = " + listOfRecord.size());
 
         for(int i=0;i<listOfRecord.size();i++){
 
@@ -93,86 +97,88 @@ public class SELECTMONOCommand {
         ArrayList<Record> uCanShowThem = new ArrayList<>();
         for(int i=0;i<this.all_records.size();i++){
 
-            boolean hesGood = false;
+            //boolean[] hesGood = false;
+            boolean[] allGood = new boolean[this.column.size()];
+            Arrays.fill(allGood, Boolean.FALSE);
             columnTypes = this.all_records.get(i).getRelInfo().getCol();
 
             String[] valuesOfRecord = this.all_records.get(i).getValues();
             for(int j =0;j<valuesOfRecord.length;j++){
-                //this.values values to compare to ValuesOfRecord
+                //this.values are the values(CLI) that i have to compare to ValuesOfRecord(valuesOfRecord ==> values of my record)
                 int ID_column_In_Values = getIDofColumn(column.get(j));
                 String columnType = columnTypes[ID_column_In_Values].getCol_type();
                 String[] pw = columnType.split("string");
-                String op = this.ops[this.posOfOP.get(i)];
+                String op = this.ops[this.posOfOP.get(j)];
                 if(columnType.equals("int")){
 
                     if(op.equals("=")){
-                        if(Integer.valueOf(valuesOfRecord[j]) == Integer.valueOf(this.values.get(j)) ){
-                            hesGood=true;
+                        if(Integer.valueOf(valuesOfRecord[j]) == Integer.valueOf(this.values.get(j).strip()) ){
+                            allGood[j] = true;
                         }
                     }else if(op.equals("<")){
-                        if(Integer.valueOf(valuesOfRecord[j]) < Integer.valueOf(this.values.get(j)) ){
-                            hesGood=true;
+                        if(Integer.valueOf(valuesOfRecord[j]) < Integer.valueOf(this.values.get(j).strip()) ){
+                            allGood[j] = true;
                         }
                     }else if(op.equals(">")){
-                        if(Integer.valueOf(valuesOfRecord[j]) > Integer.valueOf(this.values.get(j)) ){
-                            hesGood=true;
+                        if(Integer.valueOf(valuesOfRecord[j]) > Integer.valueOf(this.values.get(j).strip()) ){
+                            allGood[j] = true;
                         }
 
                     }else if(op.equals("<=")){
-                        if(Integer.valueOf(valuesOfRecord[j]) <= Integer.valueOf(this.values.get(j)) ){
-                            hesGood=true;
+                        if(Integer.valueOf(valuesOfRecord[j]) <= Integer.valueOf(this.values.get(j).strip()) ){
+                            allGood[j] = true;
                         }
 
                     }else if(op.equals(">=")){
-                        if(Integer.valueOf(valuesOfRecord[j]) >= Integer.valueOf(this.values.get(j)) ){
-                            hesGood=true;
+                        if(Integer.valueOf(valuesOfRecord[j]) >= Integer.valueOf(this.values.get(j).strip()) ){
+                            allGood[j] = true;
                         }
 
                     }else if(op.equals("<>")){
-                        if(Integer.valueOf(valuesOfRecord[j]) != Integer.valueOf(this.values.get(j)) ){
-                            hesGood=true;
+                        if(Integer.valueOf(valuesOfRecord[j]) != Integer.valueOf(this.values.get(j).strip()) ){
+                            allGood[j] = true;
                         }
 
                     }
 
                 }else if(columnType.equals("float")){
                     if(op.equals("=")){
-                        if(Float.parseFloat(valuesOfRecord[j]) == Float.parseFloat(this.values.get(j)) ){
-                            hesGood=true;
+                        if(Float.parseFloat(valuesOfRecord[j]) == Float.parseFloat(this.values.get(j).strip()) ){
+                            allGood[j] = true;
                         }
 
 
                     }else if(op.equals("<")){
-                        if(Float.parseFloat(valuesOfRecord[j]) < Float.parseFloat(this.values.get(j)) ){
-                            hesGood=true;
+                        if(Float.parseFloat(valuesOfRecord[j]) < Float.parseFloat(this.values.get(j).strip()) ){
+                            allGood[j] = true;
                         }
 
                     }else if(op.equals(">")){
-                        if(Float.parseFloat(valuesOfRecord[j]) > Float.parseFloat(this.values.get(j)) ){
-                            hesGood=true;
+                        if(Float.parseFloat(valuesOfRecord[j]) > Float.parseFloat(this.values.get(j).strip()) ){
+                            allGood[j] = true;
                         }
 
                     }else if(op.equals("<=")){
-                        if(Float.parseFloat(valuesOfRecord[j]) <= Float.parseFloat(this.values.get(j)) ){
-                            hesGood=true;
+                        if(Float.parseFloat(valuesOfRecord[j]) <= Float.parseFloat(this.values.get(j).strip()) ){
+                            allGood[j] = true;
                         }
 
                     }else if(op.equals(">=")){
-                        if(Float.parseFloat(valuesOfRecord[j]) >= Float.parseFloat(this.values.get(j)) ){
-                            hesGood=true;
+                        if(Float.parseFloat(valuesOfRecord[j]) >= Float.parseFloat(this.values.get(j).strip()) ){
+                            allGood[j] = true;
                         }
 
                     }else if(op.equals("<>")){
-                        if(Float.parseFloat(valuesOfRecord[j]) != Float.parseFloat(this.values.get(j)) ){
-                            hesGood=true;
+                        if(Float.parseFloat(valuesOfRecord[j]) != Float.parseFloat(this.values.get(j).strip()) ){
+                            allGood[j] = true;
                         }
 
                     }
 
                 }else if(pw[0].equals("string")){
                     if(op.equals("=")){
-                        if(valuesOfRecord[j].equals(this.values.get(j))){
-                            hesGood = true;
+                        if(valuesOfRecord[j].equals(this.values.get(j).strip())){
+                            allGood[j] = true;
                         }
 
                     }else{
@@ -182,9 +188,18 @@ public class SELECTMONOCommand {
                 }
 
             }
-            if(hesGood){
-                uCanShowThem.add(this.all_records.get(i));
+
+            boolean itsOkay = true;
+            for(int z=0;z<this.column.size();z++){
+                if(!allGood[z]){
+                    itsOkay = false;
+                }
             }
+            if(itsOkay){
+                uCanShowThem.add(this.all_records.get(i));
+
+            }
+
         }
         return uCanShowThem;
 
@@ -192,6 +207,7 @@ public class SELECTMONOCommand {
 
     public int getIDofColumn(String column){
         ColInfo[] cl = rel.getCol();
+        column = column.strip();
         for(int i = 0 ; i< cl.length;i++){
             String Colname = cl[i].getCol_name();
             if(Colname.equals(column)){
