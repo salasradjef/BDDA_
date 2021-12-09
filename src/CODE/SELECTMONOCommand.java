@@ -15,7 +15,7 @@ public class SELECTMONOCommand {
         private String[] ops;
       
 
-    public SELECTMONOCommand(String ch) throws IOException {
+    public SELECTMONOCommand(String ch) {
         String nomDeRelation = ch.split(" ")[3];
         Catalog catalog = Catalog.getInstance();
         this.rel = catalog.getRelationWithName(nomDeRelation);
@@ -55,9 +55,9 @@ public class SELECTMONOCommand {
             this.all_records= FM.getAllRecords(rel);
 
             if(this.column.size() > 0){
-                showRecordsValuesConditions();
+                showRecordsValues(GetRecordsConditions());
             }else {
-                showRecordsValues();
+                showRecordsValues(this.all_records);
             }
 
         }else {
@@ -66,12 +66,12 @@ public class SELECTMONOCommand {
     }
 
 
-    public void showRecordsValues(){
+    public void showRecordsValues(ArrayList<Record> listOfRecord){
         System.out.println("Total de records = " + this.all_records.size());
-        String[] values;
-        for(int i=0;i<this.all_records.size();i++){
-             values= this.all_records.get(i).getValues();
 
+        for(int i=0;i<listOfRecord.size();i++){
+
+        String[] values = listOfRecord.get(i).getValues();
             System.out.print(i + ")" + "Values = ");
             for(int j=0;j< values.length;j++){
                 if(j == values.length -1){
@@ -85,31 +85,108 @@ public class SELECTMONOCommand {
         }
     }
 
-    public void showRecordsValuesConditions(){
+    public ArrayList<Record> GetRecordsConditions(){
+        ColInfo[] columnTypes;
+        //Pour chaque record on va compare
 
 
         ArrayList<Record> uCanShowThem = new ArrayList<>();
         for(int i=0;i<this.all_records.size();i++){
+
+            boolean hesGood = false;
+            columnTypes = this.all_records.get(i).getRelInfo().getCol();
+
             String[] valuesOfRecord = this.all_records.get(i).getValues();
-            String op = this.ops[this.posOfOP.get(i)];
-            if(op.equals("=")){
+            for(int j =0;j<valuesOfRecord.length;j++){
+                //this.values values to compare to ValuesOfRecord
+                int ID_column_In_Values = getIDofColumn(column.get(j));
+                String columnType = columnTypes[ID_column_In_Values].getCol_type();
+                String[] pw = columnType.split("string");
+                String op = this.ops[this.posOfOP.get(i)];
+                if(columnType.equals("int")){
+
+                    if(op.equals("=")){
+                        if(Integer.valueOf(valuesOfRecord[j]) == Integer.valueOf(this.values.get(j)) ){
+                            hesGood=true;
+                        }
+                    }else if(op.equals("<")){
+                        if(Integer.valueOf(valuesOfRecord[j]) < Integer.valueOf(this.values.get(j)) ){
+                            hesGood=true;
+                        }
+                    }else if(op.equals(">")){
+                        if(Integer.valueOf(valuesOfRecord[j]) > Integer.valueOf(this.values.get(j)) ){
+                            hesGood=true;
+                        }
+
+                    }else if(op.equals("<=")){
+                        if(Integer.valueOf(valuesOfRecord[j]) <= Integer.valueOf(this.values.get(j)) ){
+                            hesGood=true;
+                        }
+
+                    }else if(op.equals(">=")){
+                        if(Integer.valueOf(valuesOfRecord[j]) >= Integer.valueOf(this.values.get(j)) ){
+                            hesGood=true;
+                        }
+
+                    }else if(op.equals("<>")){
+                        if(Integer.valueOf(valuesOfRecord[j]) != Integer.valueOf(this.values.get(j)) ){
+                            hesGood=true;
+                        }
+
+                    }
+
+                }else if(columnType.equals("float")){
+                    if(op.equals("=")){
+                        if(Float.parseFloat(valuesOfRecord[j]) == Float.parseFloat(this.values.get(j)) ){
+                            hesGood=true;
+                        }
 
 
-            }else if(op.equals("<")){
+                    }else if(op.equals("<")){
+                        if(Float.parseFloat(valuesOfRecord[j]) < Float.parseFloat(this.values.get(j)) ){
+                            hesGood=true;
+                        }
 
-            }else if(op.equals(">")){
+                    }else if(op.equals(">")){
+                        if(Float.parseFloat(valuesOfRecord[j]) > Float.parseFloat(this.values.get(j)) ){
+                            hesGood=true;
+                        }
 
-            }else if(op.equals("<=")){
+                    }else if(op.equals("<=")){
+                        if(Float.parseFloat(valuesOfRecord[j]) <= Float.parseFloat(this.values.get(j)) ){
+                            hesGood=true;
+                        }
 
-            }else if(op.equals(">=")){
+                    }else if(op.equals(">=")){
+                        if(Float.parseFloat(valuesOfRecord[j]) >= Float.parseFloat(this.values.get(j)) ){
+                            hesGood=true;
+                        }
 
-            }else if(op.equals("<>")){
+                    }else if(op.equals("<>")){
+                        if(Float.parseFloat(valuesOfRecord[j]) != Float.parseFloat(this.values.get(j)) ){
+                            hesGood=true;
+                        }
+
+                    }
+
+                }else if(pw[0].equals("string")){
+                    if(op.equals("=")){
+                        if(valuesOfRecord[j].equals(this.values.get(j))){
+                            hesGood = true;
+                        }
+
+                    }else{
+                        System.out.println("Une erreur de syntaxe");
+                    }
+
+                }
 
             }
-            boolean hesGood = false;
-
-
+            if(hesGood){
+                uCanShowThem.add(this.all_records.get(i));
+            }
         }
+        return uCanShowThem;
 
     }
 
