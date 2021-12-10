@@ -30,8 +30,10 @@ public class DiskManager  {
 	//methode qui permet d'allouer une page
 	public PageId AllocPage() throws IOException {
 		String DBPath = DBParams.DBPath;
+
 		File f= new File(DBPath);
-		//filtre qui permet de recuperer tout les fichiers qui se termine avec df et leurs taille est inf�rieur a 16348o
+
+		//filtre qui permet de recuperer tout les fichiers qui se termine avec df et leurs taille est inferieur a 16348o
 		FilenameFilter filter1 = new FilenameFilter() {
 			
 			@Override

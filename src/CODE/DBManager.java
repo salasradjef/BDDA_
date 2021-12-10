@@ -56,7 +56,7 @@ private static DBManager INSTANCE;
 				break;
 			case "SELECTMONO":
 				SELECTMONOCommand select = new SELECTMONOCommand(ch);
-				select.Execute();
+				select.Execute(true);
 				break;
 			case "DELETE":
 				System.out.println("Tu veux la commande DELETE");
