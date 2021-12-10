@@ -4,10 +4,11 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class Record {
-	
+
+	private Rid ID;
 	private RelationInfo relInfo;
 	private String[] values;
-	private Rid rid;
+
 	
 	
 	public Record(RelationInfo rel,String[] values) {
@@ -16,10 +17,13 @@ public class Record {
 		for(int i = 0 ;i<this.values.length;i++) {
 			this.values[i] = values[i];
 		}
-		this.rid = new Rid(new PageId(-1,0),0);
+		this.setRid(new Rid(new PageId(-1,0),-1));
 	}
-	
-	
+
+
+
+
+
 	public void writeToBuffer(ByteBuffer buff, int position) {
 		buff.position(position);
 		for(int i=0;i<relInfo.getNbr_col();i++) {
@@ -103,11 +107,11 @@ public class Record {
 	}
 
 	public Rid getRid() {
-		return rid;
+		return ID;
 	}
 
 	public void setRid(Rid rid) {
-		this.rid = rid;
+		this.ID = rid;
 	}
 }
 

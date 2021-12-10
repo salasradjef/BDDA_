@@ -55,7 +55,8 @@ public class SELECTMONOCommand {
 
 
 
-    public void Execute() throws IOException {
+
+    public void Execute(boolean print) throws IOException {
         if(this.rel != null){
             FileManager FM = FileManager.getInstance();
             this.all_records= FM.getAllRecords(rel);
@@ -63,8 +64,9 @@ public class SELECTMONOCommand {
             if(this.column.size() > 0){
                 tmp = GetRecordsConditions();
             }
-            print(tmp);
-
+            if(print){
+                print(tmp);
+            }
         }else {
             System.err.println("La Relation demandé n'existe pas");
         }

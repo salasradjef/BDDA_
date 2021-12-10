@@ -216,6 +216,7 @@ public class FileManager {
 
 				String[] values = new String[relinfo.getNbr_col()];
 				Record rec = new Record(relinfo,values);
+				rec.setRid(new Rid(PID,i));
 
 				rec.readFromBuffer(buff, 16 +  relinfo.getSlotCount() + (i * relinfo.getRecordSize()));
 
@@ -233,15 +234,14 @@ public class FileManager {
 		BufferManager BM = BufferManager.getInstance();
 		PageId freePage = INSTANCE.getFreeDataPageId(relinfo);
 		Rid recordId = INSTANCE.writeRecordToDataPage(relinfo, record, freePage);
-		BM.FlushAll();
 		record.setRid(recordId);
+		BM.FlushAll();
 		return recordId;
 	}
 
 
 	public ArrayList<Record> getAllRecords(RelationInfo relinfo) throws IOException {
 		/*Fixed*/
-
 		BufferManager BM = BufferManager.getInstance();
 		BM.FlushAll();
 		PageId headerPage = relinfo.getHeaderPageId();
@@ -289,6 +289,18 @@ public class FileManager {
 		tmpPid1.addAll(tmpPid2);
 
 		return tmpPid1;
+
+	}
+
+	public void deleteRecord(Record record) throws IOException {
+		BufferManager BM = BufferManager.getInstance();
+		PageId page = record.getRid().getRid();
+		int sltId = record.getRid().getSlotIdx();
+		ByteBuffer bufferPage = byteToBuffer(BM.getPage(page));
+		bufferPage.position(16 + sltId);
+		bufferPage.put((byte) 0 );
+		BM.FreePage(page,1);
+		BM.FlushAll();
 
 	}
 

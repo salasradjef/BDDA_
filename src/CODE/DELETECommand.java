@@ -1,5 +1,6 @@
 package CODE;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,15 +26,20 @@ public class DELETECommand {
     public void Execute() throws IOException {
         if(this.rel != null){
             SELECTMONOCommand select = new SELECTMONOCommand(this.request);
-            select.Execute();
+            select.Execute(false);
             this.recordsToDelete = select.GetRecordsConditions();
-            System.out.println("le nombre de record a supp = "+ this.recordsToDelete.size());
-        }
+            deleteRecord();
+            System.out.println("Le nombre de records supprimé est de " + this.recordsToDelete.size());
+
+            }
     }
 
 
-    public void deleteRecord(Record record){
-        
+    public void deleteRecord() throws IOException {
+        for(int i = 0 ;i<this.recordsToDelete.size();i++){
+            FileManager FM = FileManager.getInstance();
+            FM.deleteRecord(this.recordsToDelete.get(i));
+        }
 
     }
 }
