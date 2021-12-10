@@ -7,6 +7,7 @@ public class Record {
 	
 	private RelationInfo relInfo;
 	private String[] values;
+	private Rid rid;
 	
 	
 	public Record(RelationInfo rel,String[] values) {
@@ -15,6 +16,7 @@ public class Record {
 		for(int i = 0 ;i<this.values.length;i++) {
 			this.values[i] = values[i];
 		}
+		this.rid = new Rid(new PageId(-1,0),0);
 	}
 	
 	
@@ -98,6 +100,14 @@ public class Record {
 
 	public void setValues(String[] values) {
 		this.values = values;
+	}
+
+	public Rid getRid() {
+		return rid;
+	}
+
+	public void setRid(Rid rid) {
+		this.rid = rid;
 	}
 }
 

@@ -94,6 +94,7 @@ public class FileManager {
 	public PageId getFreeDataPageId(RelationInfo rel) throws IOException {
 
 		/*Tested*/
+
 		BufferManager BM = BufferManager.getInstance();
 		PageId headerPage = rel.getHeaderPageId();
 		ByteBuffer headerPageBuffer = byteToBuffer(BM.getPage(headerPage));
@@ -233,6 +234,7 @@ public class FileManager {
 		PageId freePage = INSTANCE.getFreeDataPageId(relinfo);
 		Rid recordId = INSTANCE.writeRecordToDataPage(relinfo, record, freePage);
 		BM.FlushAll();
+		record.setRid(recordId);
 		return recordId;
 	}
 

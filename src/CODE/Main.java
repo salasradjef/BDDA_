@@ -12,6 +12,7 @@ public class Main {
 	public static void main(String[] args) throws IOException, ClassNotFoundException  {
 		
 		DBParams.DBPath = args[0];
+
 		DBParams.pageSize =4096;
 		DBParams.maxPagesPerFile = 4; 
 		DBParams.frameCount = 2;
@@ -51,11 +52,13 @@ public class Main {
 
 		Rid rid =FM.InsertRecordIntoRelation(rel,record);
 		Rid rid2 = FM.InsertRecordIntoRelation(rel,record2);
-		String cmd = "SELECTMONO * FROM R WHERE A=1 AND B=2";
-		SELECTMONOCommand a = new SELECTMONOCommand(cmd);
+
+		String cmd = "DELETE FROM R WHERE A=1 AND B=2";
+		DELETECommand delete = new DELETECommand(cmd);
+		delete.Execute();
+		/*SELECTMONOCommand a = new SELECTMONOCommand(cmd);
 		a.Execute();
-		ArrayList<Record> listOfRecords = new ArrayList<>();
-		listOfRecords = FM.getAllRecords(rel);
+*/
 		/*System.out.print(listOfRecords.get(0).getValues()[0]);
 		System.out.println(listOfRecords.get(0).getValues()[1]);
 		System.out.print(listOfRecords.get(1).getValues()[0]);
