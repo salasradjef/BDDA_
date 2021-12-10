@@ -47,7 +47,6 @@ private static DBManager INSTANCE;
 			case "INSERT":
 				INSERTCommand insert = new INSERTCommand(ch);
 				insert.Execute();
-
 				break;
 			case "BATCHINSERT":
 				BATCHINSERTCommand batchInsert = new BATCHINSERTCommand(ch);
@@ -59,7 +58,10 @@ private static DBManager INSTANCE;
 				select.Execute(true);
 				break;
 			case "DELETE":
-				System.out.println("Tu veux la commande DELETE");
+				DELETECommand delete = new DELETECommand(ch);
+				delete.Execute();
+				break;
+			case "UPDATECommand":
 				break;
 			default:
 				System.err.println("La commande passé n'existe pas :)");
