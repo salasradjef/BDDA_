@@ -15,6 +15,9 @@ public class Record {
 		this.setRelInfo(rel);
 		this.values = new String[relInfo.getNbr_col()];
 		for(int i = 0 ;i<this.values.length;i++) {
+			if(values[i] != null){
+				values[i].strip();
+			}
 			this.values[i] = values[i];
 		}
 		this.setRid(new Rid(new PageId(-1,0),-1));
@@ -72,7 +75,7 @@ public class Record {
 			
 			if(pw[0].equals("string")) {
 				StringBuffer sb = new StringBuffer();
-				for(int j=0;j< Integer.parseInt(pw[1]);j++ ) {
+				for(int j=0;j<Integer.parseInt(pw[1]);j++ ) {
 					buff.getChar();
 					sb.append(buff.getChar());
 				}
@@ -103,7 +106,16 @@ public class Record {
 
 
 	public void setValues(String[] values) {
+		values = stripArray(values);
 		this.values = values;
+	}
+
+	public String[] stripArray(String[] tab){
+		String[] tmp = new String[tab.length];
+		for(int i=0;i<tab.length;i++){
+			tmp[i] = tab[i].strip();
+		}
+		return tmp;
 	}
 
 	public Rid getRid() {

@@ -303,6 +303,19 @@ public class FileManager {
 		BM.FlushAll();
 
 	}
+	public void editRecord(Record record,String[] values) throws IOException {
+		BufferManager BM = BufferManager.getInstance();
+		PageId page = record.getRid().getRid();
+		int sltId = record.getRid().getSlotIdx();
+
+		ByteBuffer bufferPage = byteToBuffer(BM.getPage(page));
+		record.setValues(values);
+		int pos = 16+record.getRelInfo().getSlotCount()+(record.getRelInfo().getRecordSize()*sltId);
+		record.writeToBuffer(bufferPage,pos);
+		BM.FreePage(page,1);
+		BM.FlushAll();
+
+	}
 
 
 }

@@ -53,19 +53,15 @@ public class Main {
 		Rid rid2 = FM.InsertRecordIntoRelation(rel,record2);
 
 
-		String cmd = "UPDATE R SET C2=rrr WHERE C3>=2";
+
+		String cmd = "UPDATE R SET A=8 WHERE A>=1";
 		UPDATECommand update = new UPDATECommand(cmd);
-/*
+		update.Execute();
 
-		String cmd = "DELETE FROM R WHERE A=1 AND B=2";
-		DELETECommand delete = new DELETECommand(cmd);
-		delete.Execute();
-
-		
-		String cmd2 = "SELECTMONO * FROM R WHERE A=1 AND B=2";
+		String cmd2 = "SELECTMONO * FROM R";
 		SELECTMONOCommand a = new SELECTMONOCommand(cmd2);
 		a.Execute(true);
-*/
+
 
 		/*System.out.print(listOfRecords.get(0).getValues()[0]);
 		System.out.println(listOfRecords.get(0).getValues()[1]);

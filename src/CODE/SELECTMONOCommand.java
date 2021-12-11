@@ -14,7 +14,7 @@ public class SELECTMONOCommand {
         private ArrayList<String> values;
         private ArrayList<Integer> posOfOP;
         private String[] ops;
-      
+
 
     public SELECTMONOCommand(String ch) {
         String nomDeRelation = ch.split(" ")[3];
@@ -35,12 +35,13 @@ public class SELECTMONOCommand {
             this.posOfOP = new ArrayList<>();
             for(int i=0;i< condition.length;i++){
                 for(int j=0;j<ops.length;j++) {
-                    if(condition[i].contains(ops[j])){
+                    String tmp = condition[i].strip();
+                    if(tmp.contains(ops[j])){
                         posOP = j;
                         break;
                     }
                 }
-                    String[] columnANDvalues = condition[i].split(ops[posOP]);
+                    String[] columnANDvalues = condition[i].strip().split(ops[posOP]);
                     posOfOP.add(posOP);
                     column.add(columnANDvalues[0]);
                     values.add(columnANDvalues[1]);
@@ -54,19 +55,20 @@ public class SELECTMONOCommand {
 
 
 
-
-
     public void Execute(boolean print) throws IOException {
         if(this.rel != null){
             FileManager FM = FileManager.getInstance();
             this.all_records= FM.getAllRecords(rel);
-            ArrayList<Record> tmp = new ArrayList<>();
-            if(this.column.size() > 0){
-                tmp = GetRecordsConditions();
+            ArrayList<Record> tmp = null;
+            if(this.column != null){
+               tmp = GetRecordsConditions();
+
+
             }
             if(print){
                 print(tmp);
             }
+
         }else {
             System.err.println("La Relation demandé n'existe pas");
         }
@@ -116,7 +118,7 @@ public class SELECTMONOCommand {
             columnTypes = this.all_records.get(i).getRelInfo().getCol();
 
             String[] valuesOfRecord = this.all_records.get(i).getValues();
-            for(int j =0;j<valuesOfRecord.length;j++){
+            for(int j =0;j<column.size();j++){
                 //this.values are the values(CLI) that i have to compare to ValuesOfRecord(valuesOfRecord ==> values of my record)
                 int ID_column_In_Values = getIDofColumn(column.get(j));
                 String columnType = columnTypes[ID_column_In_Values].getCol_type();
