@@ -18,15 +18,13 @@ public class INSERTCommand {
             String[] values = prevalues[1].split(",");
             this.record = new Record(this.rel,values);
         }
-
-
     }
 
     public void Execute() throws IOException {
         if(this.rel != null){
             FileManager FM = FileManager.getInstance();
-            Rid rid =FM.InsertRecordIntoRelation(rel,record);
-            System.out.println("Le record à bien été ajoutée voici son RID" + rid.getRid() );
+            Rid rid =FM.InsertRecordIntoRelation(rel,this.record);
+            System.out.println("Le record à bien été ajoutée");
         }else {
             System.err.println("La relation demandé n'existe pas ");
         }

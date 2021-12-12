@@ -15,6 +15,7 @@ private static DBManager INSTANCE;
 	}
 	
 	public void Init() throws FileNotFoundException, ClassNotFoundException, IOException {
+
 		Catalog catalog = Catalog.getInstance();
 		catalog.Init();
 	}
@@ -51,17 +52,19 @@ private static DBManager INSTANCE;
 			case "BATCHINSERT":
 				BATCHINSERTCommand batchInsert = new BATCHINSERTCommand(ch);
 				batchInsert.Execute();
-				System.out.println("Tu veux la commande BATCHINSERT?");
 				break;
 			case "SELECTMONO":
 				SELECTMONOCommand select = new SELECTMONOCommand(ch);
 				select.Execute(true);
+				select = null;
 				break;
 			case "DELETE":
 				DELETECommand delete = new DELETECommand(ch);
 				delete.Execute();
 				break;
-			case "UPDATECommand":
+			case "UPDATE":
+				UPDATECommand update = new UPDATECommand(ch);
+				update.Execute();
 				break;
 			default:
 				System.err.println("La commande passé n'existe pas :)");

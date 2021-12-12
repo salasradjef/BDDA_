@@ -22,25 +22,22 @@ public class RelationInfo implements Serializable {
 		
 		//Calcul du recordSize
 		for(int i=0;i<nbr_col;i++) {
-		String type = getCol()[i].getCol_type();
-		String[] pw = type.split("string");
-		
-		if(type == "int" || type =="float") {
-			this.recordSize += 4;
-		}
-		
-		
-		if(pw[0] == "string") {
-			for(int j=0;j<Integer.parseInt(pw[1]);j++) {
-				this.recordSize += 2;
+			String type = getCol()[i].getCol_type();
+			String[] pw = type.split("string");
+
+			if(type.equals("int") || type.equals("float")) {
+				this.recordSize += 4;
+			}else if(type.contains("string")) {
+				for(int j=0;j<Integer.parseInt(pw[1]);j++) {
+					this.recordSize += 2;
+				}
 			}
-		}
-			
+
 		}
 		
 		//Calcul du nombre de cases
 		int sizeOFPageId = 8;
-		this.slotCount = (DBParams.pageSize - sizeOFPageId*2) / (this.recordSize+4);
+		this.slotCount = (DBParams.pageSize - sizeOFPageId*2) / (this.recordSize+1);
 		
 		
 		

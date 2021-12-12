@@ -71,7 +71,7 @@ public class FileManager {
 		PageId headerPage = relInfo.getHeaderPageId();
 		byte[] a = BM.getPage(headerPage); //Charger HeaderPage
 		ByteBuffer tmp = ByteBuffer.wrap(a);
-		writePageIdToPageBuffer(pageV, tmp, true);
+		writePageIdToPageBuffer(pageV, tmp, true); //
 		BM.FreePage(headerPage, 1);
 
 		byte[] b = BM.getPage(pageV); // Charger notre nouvelle page
@@ -79,7 +79,7 @@ public class FileManager {
 		 //ecrire dans le premierPageId de la headerPage le PID de notre nouvelle
 
 		writePageIdToPageBuffer(headerPage, tmp2, true);
-		writePageIdToPageBuffer(headerPage, tmp2, false);
+		writePageIdToPageBuffer(new PageId(-1,0), tmp2, false);
 		tmp2.position(0);
 		for(int i=0;i< relInfo.getSlotCount();i++){
 			tmp2.put((byte)0);
@@ -135,7 +135,8 @@ public class FileManager {
 				buff.put((byte)1);
 				break;
 			}
-		} //Trouver la case vide du BitMap et la mettre a 1
+		}
+		//Trouver la case vide du BitMap et la mettre a 1
 		Rid rid = null;
 		buff.position(16+ relInfo.getSlotCount());
 		int pos=-1;
@@ -162,7 +163,6 @@ public class FileManager {
 				break;
 			}
 		}
-		BM.FreePage(PID, 1);
 
 
 		//Deplacement ou pas de la page vers la liste des pages pleines
@@ -230,7 +230,7 @@ public class FileManager {
 
 	/*----------------------------------------------------API--------------------------------------*/
 	public Rid InsertRecordIntoRelation(RelationInfo relinfo, Record record) throws IOException {
-		/*Fixed*/
+
 		BufferManager BM = BufferManager.getInstance();
 		PageId freePage = INSTANCE.getFreeDataPageId(relinfo);
 		Rid recordId = INSTANCE.writeRecordToDataPage(relinfo, record, freePage);
@@ -241,7 +241,7 @@ public class FileManager {
 
 
 	public ArrayList<Record> getAllRecords(RelationInfo relinfo) throws IOException {
-		/*Fixed*/
+
 		BufferManager BM = BufferManager.getInstance();
 		BM.FlushAll();
 		PageId headerPage = relinfo.getHeaderPageId();

@@ -1,12 +1,6 @@
 package CODE;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
-
+import java.io.*;
 
 public class DiskManager  {
 	
@@ -21,7 +15,6 @@ public class DiskManager  {
 		if(INSTANCE == null) {
 			INSTANCE = new DiskManager();
 		}
-		
 		return INSTANCE;
 		
 	}
@@ -44,8 +37,7 @@ public class DiskManager  {
 			
 		};
 
-		//filtre qui permet de recuperer tout les fichiers qui se termine avec df 
-
+		//filtre qui permet de recuperer tout les fichiers qui se termine avec df
 		FilenameFilter filter2 = new FilenameFilter() {
 
 			@Override
@@ -140,7 +132,6 @@ public class DiskManager  {
 				buff[i] = bytes[i];
 			}
 			
-			
 		}
 		if(pageID ==1) {
 			rf.skipBytes(4096);
@@ -149,7 +140,9 @@ public class DiskManager  {
 			rf.close();
 			for(int i=0; i<bytes.length;i++) {
 				buff[i] = bytes[i];
-			}}
+			}
+		}
+
 		
 		if(pageID == 2) {
 			rf.skipBytes(8192);
@@ -214,6 +207,7 @@ public class DiskManager  {
 	
 	
 	public void clean_all() {
+		//Methode qui permet de supprime tous les fichiers du dossier DB
 		File f= new File(DBParams.DBPath);
 		for(File file: f.listFiles()) {
 		    if (!file.isDirectory()) file.delete();

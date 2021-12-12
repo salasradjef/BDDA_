@@ -4,6 +4,9 @@ import java.io.IOException;
 public class BufferManager {
 	
 	private static BufferManager INSTANCE;
+
+
+
 	private Frame[] bpool;
 	private int time;
 	public static BufferManager getInstance() {
@@ -25,7 +28,7 @@ public class BufferManager {
 		}
 	}
 	
-	
+	//Methode qui permet de charge une poge
 	public byte[] getPage(PageId PID) throws IOException {
 		
 		byte[] b = new byte[DBParams.pageSize];
@@ -36,7 +39,6 @@ public class BufferManager {
 			if (bpool[i].getPID() != null) {
 				if (bpool[i].getPID() == PID) {
 					bpool[i].setPin_count(bpool[i].getPin_count() + 1);
-
 					return bpool[i].getBuff();
 				}
 			}
@@ -74,10 +76,7 @@ public class BufferManager {
 		return null;
 
 	}
-	
-	
-	
-	
+
 	public void FreePage(PageId PID, int valdirty) {
 		int cases = DBParams.frameCount;
 		for (int i = 0; i < cases; i++) {
@@ -108,6 +107,23 @@ public class BufferManager {
 				bpool[i].setTemps_free(0);
 			}
 		}
+	}
+
+
+	public Frame[] getBpool() {
+		return bpool;
+	}
+
+	public void setBpool(Frame[] bpool) {
+		this.bpool = bpool;
+	}
+
+	public int getTime() {
+		return time;
+	}
+
+	public void setTime(int time) {
+		this.time = time;
 	}
 	
 }

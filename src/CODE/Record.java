@@ -23,10 +23,6 @@ public class Record {
 		this.setRid(new Rid(new PageId(-1,0),-1));
 	}
 
-
-
-
-
 	public void writeToBuffer(ByteBuffer buff, int position) {
 		buff.position(position);
 		for(int i=0;i<relInfo.getNbr_col();i++) {
@@ -35,20 +31,16 @@ public class Record {
 
 			if(values_type.equals("int")) {
 				buff.putInt(Integer.parseInt(values[i]));
-			}
-			
-			if(values_type.equals("float")) {
+			}else if(values_type.equals("float")) {
 				buff.putFloat(Float.parseFloat(values[i]));
-			}
-			
-			if(pw[0].equals("string")) {
-				for(int j=0;j< Integer.parseInt(pw[1]);j++ ) {
+			}else if(values_type.contains("string")) {
 					String[] sp = values[i].split("");
 					for(int z=0;z<sp.length;z++) {
-						buff.putChar(sp[z].charAt(0));
+						char tmp = sp[z].charAt(0);
+						buff.putChar(tmp);
 					}
 					
-				}
+
 			}
 				
 		}
@@ -65,19 +57,15 @@ public class Record {
 			if(values_type.equals("int")) {
 				values[i] = String.valueOf(buff.getInt());
 				
-			}
-			
-			if(values_type.equals("float")) {
+			}else if(values_type.equals("float")) {
 				values[i] = String.valueOf(buff.getFloat());
 				
 				
-			}
-			
-			if(pw[0].equals("string")) {
+			} else if(values_type.contains("string")) {
 				StringBuffer sb = new StringBuffer();
 				for(int j=0;j<Integer.parseInt(pw[1]);j++ ) {
-					buff.getChar();
-					sb.append(buff.getChar());
+					char s =buff.getChar();
+					sb.append(s);
 				}
 				values[i] = sb.toString();
 			}
@@ -86,9 +74,7 @@ public class Record {
 	}
 
 	
-	
-	
-	
+
 
 	public RelationInfo getRelInfo() {
 		return relInfo;

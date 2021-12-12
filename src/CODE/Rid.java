@@ -6,7 +6,6 @@ public class Rid {
 	private int slotIdx;
 	
 	public Rid(PageId rid, int slotIdx) {
-		
 		this.Rid = rid;
 		this.slotIdx = slotIdx;
 	}
