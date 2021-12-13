@@ -11,11 +11,11 @@ public class BATCHINSERTCommand {
     private ArrayList<String> csvValues;
 
     public BATCHINSERTCommand(String ch) {
-        /*Tested*/
+
         String[] parsing = ch.split(" ");
         Catalog cat = Catalog.getInstance();
-        this.rel = cat.getRelationWithName(parsing[2]);
-        String path = "C:\\\\Users\\\\INFOTECH\\\\eclipse-workspace\\\\IDE_PROJET_RADJEF_NAITAIMER\\\\src\\\\" + parsing[5];
+        this.rel = cat.getRelationWithName(parsing[2]); // Charger la relation depuis le catalog
+        String path = "../" + parsing[5];
         csvValues = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;

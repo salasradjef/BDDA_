@@ -77,6 +77,7 @@ public class BufferManager {
 
 	}
 
+	//Methode qui libere une page
 	public void FreePage(PageId PID, int valdirty) {
 		int cases = DBParams.frameCount;
 		for (int i = 0; i < cases; i++) {

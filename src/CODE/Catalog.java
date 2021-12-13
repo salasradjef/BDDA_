@@ -81,6 +81,7 @@ public class Catalog implements Serializable {
 				trv = false;
 				return this.rel_info.get(i);
 			}
+			i++;
 		}
 		return null;
 	}

@@ -10,7 +10,7 @@ public class CreateRelationCommand {
     private ColInfo[] col;
 
     public CreateRelationCommand(String command){
-        /*Tested*/
+
         String[] infos = command.split(" ");
         this.relName = infos[2]; //set le nom de la relation
         String  between = infos[3].split("[\\(\\)]")[1];
@@ -28,13 +28,12 @@ public class CreateRelationCommand {
 
 
     public void Execute() throws IOException {
-        /*All tests passed*/
         FileManager fm = FileManager.getInstance();
         Catalog catalog = Catalog.getInstance();
-        PageId headerPage = fm.createHeaderPage();
+        PageId headerPage = fm.createHeaderPage(); //cree une headerpage
 
-        RelationInfo rel = new RelationInfo(this.relName,this.nbr_col,this.col,headerPage);
-        catalog.AddRelation(rel);
-        System.out.println("La relation "+ this.relName+" à bien été ajoutée");
+        RelationInfo rel = new RelationInfo(this.relName,this.nbr_col,this.col,headerPage); //Cree le relation
+        catalog.AddRelation(rel); // ajoute la relation au catalog
+        System.out.println("La relation "+ this.relName+" a bien ete ajoutee");
     }
 }

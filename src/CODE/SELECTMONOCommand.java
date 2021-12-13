@@ -1,19 +1,18 @@
 package CODE;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
+
 
 public class SELECTMONOCommand {
         private RelationInfo rel;
         private ArrayList<Record> all_records;
-        private ArrayList<String> column;
-        private ArrayList<String> values;
-        private ArrayList<Integer> posOfOP;
+        private ArrayList<String> column; //column that i got from CLI
+        private ArrayList<String> values; //values that i got from CLI
+        private ArrayList<Integer> posOfOP; //position of the operation in the ops array
         private String[] ops;
+        private  boolean ok = true; //control boolean
 
 
     public SELECTMONOCommand(String ch) {
@@ -25,54 +24,64 @@ public class SELECTMONOCommand {
         //Conditions
         String afterWheres[] = ch.split("WHERE");
 
-        if (afterWheres.length > 1) {
-            ops = new String[]{"<=", ">=","=","<", ">", "<>"};
-            int posOP = -1;
-            String afterWhere = afterWheres[1];
-            String[] condition = afterWhere.split("AND");
-            this.column = new ArrayList<>();
-            this.values = new ArrayList<>();
-            this.posOfOP = new ArrayList<>();
-            for(int i=0;i< condition.length;i++){
-                for(int j=0;j<ops.length;j++) {
-                    String tmp = condition[i].strip();
-                    if(tmp.contains(ops[j])){
-                        posOP = j;
-                        break;
+        if(!(afterWheres.length >20)) {
+            if (afterWheres.length > 1) {
+                ops = new String[]{"<=", ">=", "=", "<", ">", "<>"};
+                int posOP = -1;
+                String afterWhere = afterWheres[1];
+                String[] condition = afterWhere.split("AND");
+                this.column = new ArrayList<>();
+                this.values = new ArrayList<>();
+                this.posOfOP = new ArrayList<>();
+                for (int i = 0; i < condition.length; i++) {
+                    for (int j = 0; j < ops.length; j++) {
+                        String tmp = condition[i].strip();
+                        if (tmp.contains(ops[j])) {
+                            posOP = j;
+                            break;
+                        }
                     }
-                }
                     String[] columnANDvalues = condition[i].strip().split(ops[posOP]);
                     posOfOP.add(posOP);
                     column.add(columnANDvalues[0]);
                     values.add(columnANDvalues[1]);
-
+                }
 
             }
-
+        }else{
+            this.ok =false;
         }
     }
 
 
 
 
+    /*
+    * Methode qui permet d'executer la selection
+    * boolean print permet de savoir si il faut afficher sur le terminal le resultat de la selection ou pas
+    * */
     public void Execute(boolean print) throws IOException {
         if(this.rel != null){
-            FileManager FM = FileManager.getInstance();
-            this.all_records= FM.getAllRecords(rel);
-            ArrayList<Record> tmp = null;
-            if(this.column != null){
-               tmp = GetRecordsConditions();
-
-
-            }
-            if(print){
-                print(tmp);
-            }
+           if(this.ok){
+                FileManager FM = FileManager.getInstance();
+                this.all_records= FM.getAllRecords(rel);
+                ArrayList<Record> tmp = null;
+                if(this.column != null){
+                   tmp = GetRecordsConditions();
+                }
+                if(print){
+                    print(tmp);
+                }
+           }else {
+               System.out.println("Erreur");
+           }
 
         }else {
             System.err.println("La Relation demandé n'existe pas");
         }
     }
+
+
 
     public void print(ArrayList<Record> tmp){
         if(tmp == null){
@@ -85,6 +94,9 @@ public class SELECTMONOCommand {
     }
 
 
+
+
+    //methode qui permet juste d'afficher une liste de records
     public void showRecordsValues(ArrayList<Record> listOfRecord){
         System.out.println("Total de records = " + listOfRecord.size());
 
@@ -104,15 +116,16 @@ public class SELECTMONOCommand {
         }
     }
 
+
+
+    //Methode qui permet de recuperer les records selon certaines conditions
     public ArrayList<Record> GetRecordsConditions(){
         ColInfo[] columnTypes;
-        //Pour chaque record on va compare
-
-
+        //Pour chaque record on compare
         ArrayList<Record> uCanShowThem = new ArrayList<>();
         for(int i=0;i<this.all_records.size();i++){
 
-            //boolean[] hesGood = false;
+
             boolean[] allGood = new boolean[this.column.size()];
             Arrays.fill(allGood, Boolean.FALSE);
             columnTypes = this.all_records.get(i).getRelInfo().getCol();
@@ -220,6 +233,7 @@ public class SELECTMONOCommand {
 
     }
 
+    //Methode qui permet de retrouver l'id(position) d'un column dans une relation en fonction de son
     public int getIDofColumn(String column){
         ColInfo[] cl = rel.getCol();
         column = column.strip();

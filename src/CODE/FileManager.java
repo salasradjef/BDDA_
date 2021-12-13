@@ -71,7 +71,7 @@ public class FileManager {
 		PageId headerPage = relInfo.getHeaderPageId();
 		byte[] a = BM.getPage(headerPage); //Charger HeaderPage
 		ByteBuffer tmp = ByteBuffer.wrap(a);
-		writePageIdToPageBuffer(pageV, tmp, true); //
+		writePageIdToPageBuffer(pageV, tmp, true);
 		BM.FreePage(headerPage, 1);
 
 		byte[] b = BM.getPage(pageV); // Charger notre nouvelle page
@@ -91,7 +91,7 @@ public class FileManager {
 
 
 
-
+//Methode qui recupere un data page avec de l'espace
 	public PageId getFreeDataPageId(RelationInfo rel) throws IOException {
 
 
@@ -104,6 +104,7 @@ public class FileManager {
 		BM.FreePage(headerPage,0);
 		if(firstEmpty.getFileIdx() == -1 && firstEmpty.getPageIdx() ==0){
 			PageId freePage= INSTANCE.addDataPage(rel);
+			BM.FlushAll();
 			ByteBuffer freePageBuffer = byteToBuffer(BM.getPage(freePage));
 			INSTANCE.writePageIdToPageBuffer(headerPage,freePageBuffer,true);
 			PageId fact = new PageId(-1,0);
@@ -121,7 +122,7 @@ public class FileManager {
 	}
 
 	public Rid writeRecordToDataPage(RelationInfo relInfo, Record record, PageId PID) throws IOException {
-		/*Tested*/
+
 		BufferManager BM = BufferManager.getInstance(); //BufferManager
 		ByteBuffer buff = byteToBuffer(BM.getPage(PID));
 

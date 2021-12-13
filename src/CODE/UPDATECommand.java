@@ -7,9 +7,9 @@ import java.util.Arrays;
 public class UPDATECommand {
     private String request;
     private RelationInfo rel;
-    private ArrayList<Record> recordsToUpdate;
-    private ArrayList<String> column;
-    private ArrayList<String> values;
+    private ArrayList<Record> recordsToUpdate; //Liste de records a modifie
+    private ArrayList<String> column; // Column a modifie
+    private ArrayList<String> values; // values a mettre
 
 
 
@@ -18,9 +18,9 @@ public class UPDATECommand {
     public UPDATECommand(String ch){
         String nameOfRelation = ch.split(" ")[1];
         Catalog catalog = Catalog.getInstance();
-        this.rel = catalog.getRelationWithName(nameOfRelation);
+        this.rel = catalog.getRelationWithName(nameOfRelation); // Charger la relation depuis le catalog
         String[] afterWhere = ch.split("WHERE");
-        this.request = "SELECTMONO * FROM " + nameOfRelation + " WHERE " + afterWhere[1];
+        this.request = "SELECTMONO * FROM " + nameOfRelation + " WHERE " + afterWhere[1]; //Convertir la request en SELECT pour charger les records en fonctions des conditions
         String afterSet = ch.split("SET")[1];
         String ColumnsToEdit = afterSet.split("WHERE")[0];
         String [] conditions = ColumnsToEdit.split(",");

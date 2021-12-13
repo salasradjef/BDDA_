@@ -9,13 +9,12 @@ public class INSERTCommand {
     private Record record;
 
     public INSERTCommand(String ch){
-        /*Tested*/
         String[] parsing = ch.split(" ");
         Catalog cat = Catalog.getInstance();
-        this.rel = cat.getRelationWithName(parsing[2]);
+        this.rel = cat.getRelationWithName(parsing[2]); // Charger la relation depuis le catalog
         if(rel.getName() != null) {
             String[] prevalues = parsing[4].split("[\\(\\)]");
-            String[] values = prevalues[1].split(",");
+            String[] values = prevalues[1].split(","); // Lire les values passe via le CLI
             this.record = new Record(this.rel,values);
         }
     }
@@ -24,9 +23,9 @@ public class INSERTCommand {
         if(this.rel != null){
             FileManager FM = FileManager.getInstance();
             Rid rid =FM.InsertRecordIntoRelation(rel,this.record);
-            System.out.println("Le record à bien ete ajoutée");
+            System.out.println("Le record a bien ete ajoutae");
         }else {
-            System.err.println("La relation demandé n'existe pas ");
+            System.err.println("La relation demande n'existe pas ");
         }
 
         }
