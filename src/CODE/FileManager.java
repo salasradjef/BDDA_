@@ -93,7 +93,6 @@ public class FileManager {
 
 	public PageId getFreeDataPageId(RelationInfo rel) throws IOException {
 
-		/*Tested*/
 
 		BufferManager BM = BufferManager.getInstance();
 		PageId headerPage = rel.getHeaderPageId();
@@ -152,7 +151,6 @@ public class FileManager {
 		}
 
 
-
 		//Voir si la page est devenue pleine
 		buff.position(16); boolean trv = true;
 		byte s = -1;
@@ -169,9 +167,39 @@ public class FileManager {
 
 		if (trv) {
 
+
+
+
+
 			ByteBuffer headerPage_buff = byteToBuffer(BM.getPage(relInfo.getHeaderPageId()));
-			PageId firstFull = readPageIdFromPageBuffer(headerPage_buff, true);
+
+			PageId previousofheader = readPageIdFromPageBuffer(headerPage_buff,true);
+			PageId nextofheader = readPageIdFromPageBuffer(headerPage_buff,false);
+
+
+			writePageIdToPageBuffer(PID,headerPage_buff,false);
+			writePageIdToPageBuffer(new PageId(-1,0),headerPage_buff,true);
+			BM.FreePage(relInfo.getHeaderPageId(),1);
+
+			ByteBuffer page = byteToBuffer(BM.getPage(PID));
+			writePageIdToPageBuffer(relInfo.getHeaderPageId(), page,true);
+			writePageIdToPageBuffer(nextofheader,page,false);
+			BM.FreePage(PID,1);
+
+			if(nextofheader.getFileIdx() != -1 && nextofheader.getPageIdx() != 0){
+				BM.FlushAll();
+				ByteBuffer nextBuffer = byteToBuffer(BM.getPage(nextofheader));
+				writePageIdToPageBuffer(PID,nextBuffer,true);
+				BM.FreePage(nextofheader,1);
+			}
+
+
+
+
+
+			/*PageId firstFull = readPageIdFromPageBuffer(headerPage_buff, true);
 			writePageIdToPageBuffer(PID, headerPage_buff, false);
+			writePageIdToPageBuffer(new PageId(-1,0),headerPage_buff,true);
 			BM.FreePage(relInfo.getHeaderPageId(), 1);
 
 			ByteBuffer firstFull_buff = byteToBuffer(BM.getPage(firstFull));
@@ -180,11 +208,15 @@ public class FileManager {
 
 			ByteBuffer PID_buff = byteToBuffer(BM.getPage(PID));
 			writePageIdToPageBuffer(firstFull, PID_buff, false);
-			writePageIdToPageBuffer(relInfo.getHeaderPageId(), PID_buff, true);
+			writePageIdToPageBuffer(relInfo.getHeaderPageId(), PID_buff, true);*/
 
-			BM.FreePage(PID, 1);
 		}
+
+
+
 		BM.FreePage(PID, 1);
+		BM.FlushAll();
+
 		return rid;
 	}
 

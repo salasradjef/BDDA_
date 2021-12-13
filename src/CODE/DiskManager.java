@@ -42,7 +42,6 @@ public class DiskManager  {
 
 			@Override
 			public boolean accept(File dir, String name) {
-				// TODO Auto-generated method stub
 				return name.endsWith(".df");
 			}
 			

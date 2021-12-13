@@ -1,3 +1,4 @@
+package CODE.Tests;
 
 import CODE.BufferManager;
 import CODE.DBParams;

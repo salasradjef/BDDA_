@@ -127,30 +127,30 @@ public class SELECTMONOCommand {
                 if(columnType.equals("int")){
 
                     if(op.equals("=")){
-                        if(Integer.valueOf(valuesOfRecord[j]) == Integer.valueOf(this.values.get(j).strip()) ){
+                        if(Integer.valueOf(valuesOfRecord[ID_column_In_Values]) == Integer.valueOf(this.values.get(j).strip()) ){
                             allGood[j] = true;
                         }
                     }else if(op.equals("<")){
-                        if(Integer.valueOf(valuesOfRecord[j]) < Integer.valueOf(this.values.get(j).strip()) ){
+                        if(Integer.valueOf(valuesOfRecord[ID_column_In_Values]) < Integer.valueOf(this.values.get(j).strip()) ){
                             allGood[j] = true;
                         }
                     }else if(op.equals(">")){
-                        if(Integer.valueOf(valuesOfRecord[j]) > Integer.valueOf(this.values.get(j).strip()) ){
+                        if(Integer.valueOf(valuesOfRecord[ID_column_In_Values]) > Integer.valueOf(this.values.get(j).strip()) ){
                             allGood[j] = true;
                         }
 
                     }else if(op.equals("<=")){
-                        if(Integer.valueOf(valuesOfRecord[j]) <= Integer.valueOf(this.values.get(j).strip()) ){
+                        if(Integer.valueOf(valuesOfRecord[ID_column_In_Values]) <= Integer.valueOf(this.values.get(j).strip()) ){
                             allGood[j] = true;
                         }
 
                     }else if(op.equals(">=")){
-                        if(Integer.valueOf(valuesOfRecord[j]) >= Integer.valueOf(this.values.get(j).strip()) ){
+                        if(Integer.valueOf(valuesOfRecord[ID_column_In_Values]) >= Integer.valueOf(this.values.get(j).strip()) ){
                             allGood[j] = true;
                         }
 
                     }else if(op.equals("<>")){
-                        if(Integer.valueOf(valuesOfRecord[j]) != Integer.valueOf(this.values.get(j).strip()) ){
+                        if(Integer.valueOf(valuesOfRecord[ID_column_In_Values]) != Integer.valueOf(this.values.get(j).strip()) ){
                             allGood[j] = true;
                         }
 
@@ -158,33 +158,33 @@ public class SELECTMONOCommand {
 
                 }else if(columnType.equals("float")){
                     if(op.equals("=")){
-                        if(Float.parseFloat(valuesOfRecord[j]) == Float.parseFloat(this.values.get(j).strip()) ){
+                        if(Float.parseFloat(valuesOfRecord[ID_column_In_Values]) == Float.parseFloat(this.values.get(j).strip()) ){
                             allGood[j] = true;
                         }
 
 
                     }else if(op.equals("<")){
-                        if(Float.parseFloat(valuesOfRecord[j]) < Float.parseFloat(this.values.get(j).strip()) ){
+                        if(Float.parseFloat(valuesOfRecord[ID_column_In_Values]) < Float.parseFloat(this.values.get(j).strip()) ){
                             allGood[j] = true;
                         }
 
                     }else if(op.equals(">")){
-                        if(Float.parseFloat(valuesOfRecord[j]) > Float.parseFloat(this.values.get(j).strip()) ){
+                        if(Float.parseFloat(valuesOfRecord[ID_column_In_Values]) > Float.parseFloat(this.values.get(j).strip()) ){
                             allGood[j] = true;
                         }
 
                     }else if(op.equals("<=")){
-                        if(Float.parseFloat(valuesOfRecord[j]) <= Float.parseFloat(this.values.get(j).strip()) ){
+                        if(Float.parseFloat(valuesOfRecord[ID_column_In_Values]) <= Float.parseFloat(this.values.get(j).strip()) ){
                             allGood[j] = true;
                         }
 
                     }else if(op.equals(">=")){
-                        if(Float.parseFloat(valuesOfRecord[j]) >= Float.parseFloat(this.values.get(j).strip()) ){
+                        if(Float.parseFloat(valuesOfRecord[ID_column_In_Values]) >= Float.parseFloat(this.values.get(j).strip()) ){
                             allGood[j] = true;
                         }
 
                     }else if(op.equals("<>")){
-                        if(Float.parseFloat(valuesOfRecord[j]) != Float.parseFloat(this.values.get(j).strip()) ){
+                        if(Float.parseFloat(valuesOfRecord[ID_column_In_Values]) != Float.parseFloat(this.values.get(j).strip()) ){
                             allGood[j] = true;
                         }
 
@@ -192,7 +192,7 @@ public class SELECTMONOCommand {
 
                 }else if(pw[0].equals("string")){
                     if(op.equals("=")){
-                        if(valuesOfRecord[j].equals(this.values.get(j).strip())){
+                        if(valuesOfRecord[ID_column_In_Values].equals(this.values.get(j).strip())){
                             allGood[j] = true;
                         }
 

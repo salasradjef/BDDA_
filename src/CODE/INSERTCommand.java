@@ -24,7 +24,7 @@ public class INSERTCommand {
         if(this.rel != null){
             FileManager FM = FileManager.getInstance();
             Rid rid =FM.InsertRecordIntoRelation(rel,this.record);
-            System.out.println("Le record à bien été ajoutée");
+            System.out.println("Le record à bien été ajoutée" + rid.getRid().toString());
         }else {
             System.err.println("La relation demandé n'existe pas ");
         }
