@@ -61,7 +61,7 @@ public class FileManager {
 
 
 	public PageId addDataPage(RelationInfo relInfo) throws IOException {
-		/*Tested*/
+
 		DiskManager disk = DiskManager.getInstance();
 		BufferManager BM = BufferManager.getInstance();
 
@@ -85,6 +85,7 @@ public class FileManager {
 			tmp2.put((byte)0);
 		}
 		BM.FreePage(pageV, 1);
+
 		return pageV;
 	}
 
@@ -95,12 +96,12 @@ public class FileManager {
 
 
 		BufferManager BM = BufferManager.getInstance();
+
 		PageId headerPage = rel.getHeaderPageId();
 		ByteBuffer headerPageBuffer = byteToBuffer(BM.getPage(headerPage));
 		PageId firstEmpty = INSTANCE.readPageIdFromPageBuffer(headerPageBuffer,true);
 
 		BM.FreePage(headerPage,0);
-
 		if(firstEmpty.getFileIdx() == -1 && firstEmpty.getPageIdx() ==0){
 			PageId freePage= INSTANCE.addDataPage(rel);
 			ByteBuffer freePageBuffer = byteToBuffer(BM.getPage(freePage));
@@ -167,10 +168,6 @@ public class FileManager {
 
 		if (trv) {
 
-
-
-
-
 			ByteBuffer headerPage_buff = byteToBuffer(BM.getPage(relInfo.getHeaderPageId()));
 
 			PageId previousofheader = readPageIdFromPageBuffer(headerPage_buff,true);
@@ -193,23 +190,6 @@ public class FileManager {
 				BM.FreePage(nextofheader,1);
 			}
 
-
-
-
-
-			/*PageId firstFull = readPageIdFromPageBuffer(headerPage_buff, true);
-			writePageIdToPageBuffer(PID, headerPage_buff, false);
-			writePageIdToPageBuffer(new PageId(-1,0),headerPage_buff,true);
-			BM.FreePage(relInfo.getHeaderPageId(), 1);
-
-			ByteBuffer firstFull_buff = byteToBuffer(BM.getPage(firstFull));
-			writePageIdToPageBuffer(PID, firstFull_buff, true);
-			BM.FreePage(firstFull, 1);
-
-			ByteBuffer PID_buff = byteToBuffer(BM.getPage(PID));
-			writePageIdToPageBuffer(firstFull, PID_buff, false);
-			writePageIdToPageBuffer(relInfo.getHeaderPageId(), PID_buff, true);*/
-
 		}
 
 
@@ -227,6 +207,7 @@ public class FileManager {
 
 
 	public ArrayList<Record> getRecordsInDataPage(RelationInfo relinfo, PageId PID) throws IOException {
+
 		ArrayList<Record> listRecords = new ArrayList<>();
 		ArrayList<Integer> ID_RECORDs = new ArrayList<>();
 		BufferManager BM = BufferManager.getInstance();
@@ -298,6 +279,7 @@ public class FileManager {
 			tmpPid1.addAll(getRecordsInDataPage(relinfo, firstEmpty));
 
 			firstEmpty = next;
+			BM.FlushAll();
 
 
 		}
@@ -313,7 +295,7 @@ public class FileManager {
 
 			tmpPid2.addAll(getRecordsInDataPage(relinfo, firstFull));
 			firstFull = next2;
-
+			BM.FlushAll();
 
 		}
 

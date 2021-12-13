@@ -190,7 +190,7 @@ public class SELECTMONOCommand {
 
                     }
 
-                }else if(pw[0].equals("string")){
+                }else if(columnType.contains("string")){
                     if(op.equals("=")){
                         if(valuesOfRecord[ID_column_In_Values].equals(this.values.get(j).strip())){
                             allGood[j] = true;

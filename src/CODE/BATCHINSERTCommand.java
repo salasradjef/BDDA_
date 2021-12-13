@@ -33,7 +33,7 @@ public class BATCHINSERTCommand {
                 String cmd = "INSERT INTO " + this.rel.getName() +" RECORD (" +csvValues.get(i) +")";
                 INSERTCommand inst = new INSERTCommand(cmd);
                 inst.Execute();
-                System.out.print(i);
+
             }
         }
     }
